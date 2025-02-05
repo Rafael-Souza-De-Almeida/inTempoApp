@@ -1,17 +1,11 @@
 package com.rafael_souza_de_almeida.inTempo.Service;
 
-import com.rafael_souza_de_almeida.inTempo.Auth.UserAuthenticated;
 import com.rafael_souza_de_almeida.inTempo.DTO.LoginRequestDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.SignUpRequestDTO;
-import com.rafael_souza_de_almeida.inTempo.DTO.UserDTO;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.EmailAlreadyTakenException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UsernameAlredyExistsException;
 import com.rafael_souza_de_almeida.inTempo.Repository.UserRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +27,7 @@ public class AuthenticationService {
 
     public String authenticate(LoginRequestDTO dto) {
 
-        Optional<User> possibleUser = userRepository.findByUsername(dto.getUsername());
+        Optional<User> possibleUser = userRepository.findByEmail(dto.getEmail());
 
         if(possibleUser.isEmpty()) {
             throw new RuntimeException("Usuário não encontrado");

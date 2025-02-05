@@ -4,19 +4,19 @@ import com.rafael_souza_de_almeida.inTempo.Entity.User;
 
 public class LoginRequestDTO {
 
-    private String username;
+    private String email;
     private String password;
 
     public LoginRequestDTO(User entity) {
-        this.username = entity.getUsername();
+        this.email = entity.getEmail();
         this.password = entity.getPassword();
     }
 
     public LoginRequestDTO() {
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
