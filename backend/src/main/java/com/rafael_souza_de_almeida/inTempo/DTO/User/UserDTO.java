@@ -1,7 +1,6 @@
-package com.rafael_souza_de_almeida.inTempo.DTO;
+package com.rafael_souza_de_almeida.inTempo.DTO.User;
 
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
-import jakarta.persistence.Column;
 
 public class UserDTO {
 

@@ -1,7 +1,7 @@
 package com.rafael_souza_de_almeida.inTempo.Service;
 
-import com.rafael_souza_de_almeida.inTempo.DTO.LoginRequestDTO;
-import com.rafael_souza_de_almeida.inTempo.DTO.SignUpRequestDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.User.LoginRequestDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.User.SignUpRequestDTO;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.EmailAlreadyTakenException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UsernameAlredyExistsException;
