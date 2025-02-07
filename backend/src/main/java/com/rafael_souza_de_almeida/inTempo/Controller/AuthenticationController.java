@@ -42,5 +42,11 @@ public class AuthenticationController {
         }
     }
 
+    @DeleteMapping("/sign_out")
+    public ResponseEntity<?> delete(HttpServletResponse response) {
+        authenticationService.logout(response);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
 }

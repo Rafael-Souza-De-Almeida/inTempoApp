@@ -6,8 +6,11 @@ import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.EmailAlreadyTakenException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UsernameAlredyExistsException;
 import com.rafael_souza_de_almeida.inTempo.Repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +76,20 @@ public class AuthenticationService {
 
         return new SignUpRequestDTO(user);
 
+
+    }
+
+    public void logout( HttpServletResponse response) {
+
+        ResponseCookie cookie = ResponseCookie.from("jwt_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("strict")
+                .build();
+
+        response.addHeader("set-cookie", cookie.toString());
 
     }
 
