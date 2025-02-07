@@ -3,9 +3,15 @@ package com.rafael_souza_de_almeida.inTempo.Configuration;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.rafael_souza_de_almeida.inTempo.Service.JwtCookieFilter;
+import com.rafael_souza_de_almeida.inTempo.Service.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +25,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -33,16 +40,31 @@ public class SecurityConfig {
     @Value("${spring.security.keys.private}")
     private RSAPrivateKey privateKey;
 
-    private UserDetailsService userDetailsService;
+
+    private final JwtCookieFilter jwtCookieFilter;
+
+    public SecurityConfig(JwtCookieFilter jwtCookieFilter) {
+        this.jwtCookieFilter = jwtCookieFilter;
+    }
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .authorizeHttpRequests(auth -> auth
+                                .requestMatchers(HttpMethod.GET, "/posts").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/posts").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/posts/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/posts/**").authenticated()
+                                .anyRequest().permitAll()
+                        )
                 .oauth2ResourceServer(conf -> conf.jwt(Customizer.withDefaults()));
 
+        http.addFilterBefore(jwtCookieFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
+
 
     @Bean
     JwtDecoder jwtDecoder() {

@@ -6,6 +6,7 @@ import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.EmailAlreadyTakenException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UsernameAlredyExistsException;
 import com.rafael_souza_de_almeida.inTempo.Repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String authenticate(LoginRequestDTO dto) {
+    public void authenticate(LoginRequestDTO dto, HttpServletResponse response) {
 
         Optional<User> possibleUser = userRepository.findByEmail(dto.getEmail());
 
@@ -43,7 +44,9 @@ public class AuthenticationService {
             throw new RuntimeException("Senha incorreta!");
         }
 
-        return jwtService.generateToken(user);
+         jwtService.generateToken(user, response);
+
+
     }
 
     @Transactional

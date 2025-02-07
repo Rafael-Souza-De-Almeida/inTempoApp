@@ -5,6 +5,7 @@ import com.rafael_souza_de_almeida.inTempo.DTO.User.SignUpRequestDTO;
 import com.rafael_souza_de_almeida.inTempo.Exception.EmailAlreadyTakenException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UsernameAlredyExistsException;
 import com.rafael_souza_de_almeida.inTempo.Service.AuthenticationService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/sign_in")
-    public ResponseEntity<?> authenticate(@RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<?> authenticate(@RequestBody LoginRequestDTO dto, HttpServletResponse response) {
         try {
-            var result = authenticationService.authenticate(dto);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("token", result));
+            authenticationService.authenticate(dto, response);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário ou senha incorretos!");
         }
