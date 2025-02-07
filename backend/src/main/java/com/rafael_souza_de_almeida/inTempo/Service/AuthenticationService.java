@@ -34,8 +34,6 @@ public class AuthenticationService {
             throw new RuntimeException("Usuário não encontrado");
         }
 
-
-
         User user = possibleUser.get();
 
         boolean isPasswordCorrect = passwordEncoder.matches(dto.getPassword(), user.getPassword());

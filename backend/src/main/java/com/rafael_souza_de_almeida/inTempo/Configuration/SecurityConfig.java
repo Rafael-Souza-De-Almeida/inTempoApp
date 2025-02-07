@@ -55,6 +55,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/posts").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/posts/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/posts/**").authenticated()
+                                .requestMatchers("/like").authenticated()
                                 .anyRequest().permitAll()
                         )
                 .oauth2ResourceServer(conf -> conf.jwt(Customizer.withDefaults()));
