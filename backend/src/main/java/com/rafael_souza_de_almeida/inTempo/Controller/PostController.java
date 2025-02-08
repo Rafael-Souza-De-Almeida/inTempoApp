@@ -6,6 +6,7 @@ import com.rafael_souza_de_almeida.inTempo.Exception.PostNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UserNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +30,12 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<?> save(@RequestBody CreateOrEditPostDTO dto, HttpServletRequest request) {
         try {
             var result = postService.save(dto, request);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

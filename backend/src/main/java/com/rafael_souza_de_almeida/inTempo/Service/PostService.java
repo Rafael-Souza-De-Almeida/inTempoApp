@@ -9,6 +9,7 @@ import com.rafael_souza_de_almeida.inTempo.Exception.UserNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Repository.PostRepository;
 import com.rafael_souza_de_almeida.inTempo.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +34,17 @@ public class PostService {
         return posts.stream().map(PostDTO::new).toList();
     }
 
-    public PostDTO save(CreateOrEditPostDTO dto, HttpServletRequest request) throws UserNotFoundException {
+    public PostDTO save(CreateOrEditPostDTO dto, HttpServletRequest request) throws UserNotFoundException, BadRequestException {
 
         String user_id = jwtService.extractIdFromCookie(request);
 
         User user = userRepository.findById(user_id).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         Post post = new Post();
+
+        if(dto.getContent().isEmpty()) {
+            throw new BadRequestException("O conteúdo do post deve possuir pelo menos 1 caracter.");
+        }
 
         post.setContent(dto.getContent());
         post.setUser(user);

@@ -51,12 +51,12 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(HttpMethod.GET, "/posts").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/posts").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/posts/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/posts/**").authenticated()
+                                .requestMatchers("/posts").permitAll()
+                                .requestMatchers( "/posts/**").authenticated()
                                 .requestMatchers("/like").authenticated()
                                 .requestMatchers("/bookmark").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/comments/**").permitAll()
+                                .requestMatchers("/comments/**").authenticated()
                                 .anyRequest().permitAll()
                         )
                 .oauth2ResourceServer(conf -> conf.jwt(Customizer.withDefaults()));

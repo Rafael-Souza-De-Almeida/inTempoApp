@@ -45,8 +45,6 @@ public class LikeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id, HttpServletRequest request) {
-
-
         try {
             likeService.delete(id, request);
             return  ResponseEntity.status(HttpStatus.OK).build();
