@@ -58,6 +58,8 @@ public class SecurityConfig {
                                 .requestMatchers("/bookmark").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/comments/**").permitAll()
                                 .requestMatchers("/comments/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/follow/**").permitAll()
+                                .requestMatchers("/follow/**").authenticated()
                                 .anyRequest().permitAll()
                         )
                 .oauth2ResourceServer(conf -> conf.jwt(Customizer.withDefaults()));
