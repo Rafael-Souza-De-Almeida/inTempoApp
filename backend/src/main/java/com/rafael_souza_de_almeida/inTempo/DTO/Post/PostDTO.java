@@ -12,6 +12,7 @@ public class PostDTO {
     private Date updated_at;
     private String user_id;
     private String username;
+    private String profile_pic;
 
     public PostDTO(Post entity) {
         this.id = entity.getId();
@@ -20,6 +21,7 @@ public class PostDTO {
         this.updated_at = entity.getUpdated_at();
         this.user_id = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
+        this.profile_pic = entity.getUser().getImage_url();
     }
 
     public PostDTO() {
@@ -47,5 +49,9 @@ public class PostDTO {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getProfile_pic() {
+        return profile_pic;
     }
 }

@@ -3,12 +3,18 @@ spring:
     url: jdbc:postgresql://localhost:5432/InTempo
     username: admin
     password: admin123
+    hikari:
+      auto-commit: false
 
   jpa:
     database: POSTGRESQL
     hibernate:
       ddl-auto: update
     show-sql: true
+    servlet:
+      multipart:
+        max-file-size: 20MB
+        max-request-size: 20MB
 
   security:
     keys:

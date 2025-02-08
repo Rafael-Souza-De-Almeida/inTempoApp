@@ -51,6 +51,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers(HttpMethod.PUT,"/auth/update_account").authenticated()
                                 .requestMatchers("/posts").permitAll()
                                 .requestMatchers( "/posts/**").authenticated()
                                 .requestMatchers("/like").authenticated()

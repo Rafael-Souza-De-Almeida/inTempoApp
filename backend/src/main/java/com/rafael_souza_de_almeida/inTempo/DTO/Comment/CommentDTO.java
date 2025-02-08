@@ -9,16 +9,16 @@ public class CommentDTO {
     private String username;
     private Long post_id;
     private String content;
+    private String profile_pic;
 
-    // TO-DO: adiconar atributo para foto de perfil do usuário
-
-
+    
     public CommentDTO(Comment entity) {
         this.id = entity.getId();
         this.user_id = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
         this.post_id = entity.getPost().getId();
         this.content = entity.getContent();
+        this.profile_pic = entity.getUser().getImage_url();
     }
 
     public CommentDTO() {
@@ -42,5 +42,9 @@ public class CommentDTO {
 
     public String getContent() {
         return content;
+    }
+
+    public String getProfile_pic() {
+        return profile_pic;
     }
 }

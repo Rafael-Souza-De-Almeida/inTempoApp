@@ -55,7 +55,7 @@ public class PostController {
         try {
             var result = postService.update(dto, id, request);
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch(PostNotFoundException | AccessDeniedException e) {
+        } catch(PostNotFoundException | AccessDeniedException | BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

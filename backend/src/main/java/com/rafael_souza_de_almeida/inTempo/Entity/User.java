@@ -23,15 +23,28 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Lob
+    @Column
+    private byte[] profile_pic;
+
+    @Column(name = "profile_pic_type")
+    private String profilePicType;
+
+    @Column(name = "image_url")
+    private String image_url;
+
     public User() {
     }
 
-    public User(String id, String name, String email, String username, String password) {
+    public User(String id, String name, String email, String username, String password, byte[] profile_pic, String profilePicType, String image_url) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.profile_pic = profile_pic;
+        this.profilePicType = profilePicType;
+        this.image_url = image_url;
     }
 
     public String getId() {
@@ -69,5 +82,29 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public byte[] getProfile_pic() {
+        return profile_pic;
+    }
+
+    public void setProfile_pic(byte[] profile_pic) {
+        this.profile_pic = profile_pic;
+    }
+
+    public String getProfilePicType() {
+        return profilePicType;
+    }
+
+    public void setProfilePicType(String profilePicType) {
+        this.profilePicType = profilePicType;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

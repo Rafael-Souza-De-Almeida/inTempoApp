@@ -42,11 +42,9 @@ public class PostService {
 
         Post post = new Post();
 
-        if(dto.getContent().isEmpty()) {
-            throw new BadRequestException("O conteúdo do post deve possuir pelo menos 1 caracter.");
-        }
+        String content = verifyContent(dto.getContent());
 
-        post.setContent(dto.getContent());
+        post.setContent(content);
         post.setUser(user);
 
         postRepository.save(post);
@@ -69,7 +67,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostDTO update(CreateOrEditPostDTO dto, Long id, HttpServletRequest request) throws PostNotFoundException, AccessDeniedException {
+    public PostDTO update(CreateOrEditPostDTO dto, Long id, HttpServletRequest request) throws PostNotFoundException, AccessDeniedException, BadRequestException {
 
         Post postToUpdate = postRepository.findById(id).orElseThrow(()-> new PostNotFoundException("Post não encontrado"));
 
@@ -77,12 +75,22 @@ public class PostService {
             throw new AccessDeniedException("Acesso negado");
         }
 
-        postToUpdate.setContent(dto.getContent());
+        String content = verifyContent(dto.getContent());
+
+        postToUpdate.setContent(content);
 
         postRepository.save(postToUpdate);
 
         return new PostDTO(postToUpdate);
 
+    }
+
+    private String verifyContent(String content) throws BadRequestException {
+        if(content.isEmpty()) {
+            throw new BadRequestException("O conteúdo do post deve possuir pelo menos 1 caracter.");
+        }
+
+        return content;
     }
 
 

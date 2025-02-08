@@ -8,7 +8,7 @@ public class UserDTO {
     private String name;
     private String email;
     private String username;
-    private String password;
+    private String image_url;
 
     public UserDTO() {
     }
@@ -18,6 +18,26 @@ public class UserDTO {
         this.name = entity.getName();
         this.email = entity.getEmail();
         this.username = entity.getUsername();
-        this.password = entity.getPassword();
+        this.image_url = entity.getImage_url();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getImage_url() {
+        return image_url;
     }
 }
