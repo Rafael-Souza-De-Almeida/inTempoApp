@@ -6,6 +6,8 @@ import com.rafael_souza_de_almeida.inTempo.Entity.Post;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.PostNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UserNotFoundException;
+import com.rafael_souza_de_almeida.inTempo.Repository.CommentRepository;
+import com.rafael_souza_de_almeida.inTempo.Repository.LikeRepository;
 import com.rafael_souza_de_almeida.inTempo.Repository.PostRepository;
 import com.rafael_souza_de_almeida.inTempo.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,17 +23,25 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
     private final JwtService jwtService;
+    private final CommentRepository commentRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, JwtService jwtService) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, LikeRepository likeRepository, JwtService jwtService, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.likeRepository = likeRepository;
         this.jwtService = jwtService;
+        this.commentRepository = commentRepository;
     }
+
 
     public List<PostDTO> findAllPosts() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream().map(PostDTO::new).toList();
+        return posts.
+                stream().map(post -> new PostDTO(
+                        post, likeRepository.likeQuantity(post.getId()), commentRepository.commentsQuantity(post.getId()))
+                ).toList();
     }
 
     public PostDTO save(CreateOrEditPostDTO dto, HttpServletRequest request) throws UserNotFoundException, BadRequestException {

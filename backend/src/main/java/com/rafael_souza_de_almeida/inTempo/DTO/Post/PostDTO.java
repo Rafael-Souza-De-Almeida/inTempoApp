@@ -13,6 +13,20 @@ public class PostDTO {
     private String user_id;
     private String username;
     private String profile_pic;
+    private Long likeQuantity;
+    private Long commentsQuantity;
+
+    public PostDTO(Post entity, Long likeQuantity, Long commentsQuantity) {
+        this.id = entity.getId();
+        this.content = entity.getContent();
+        this.created_at = entity.getCreated_at();
+        this.updated_at = entity.getUpdated_at();
+        this.user_id = entity.getUser().getId();
+        this.username = entity.getUser().getUsername();
+        this.likeQuantity = likeQuantity;
+        this.commentsQuantity = commentsQuantity;
+        this.profile_pic = entity.getUser().getImage_url();
+    }
 
     public PostDTO(Post entity) {
         this.id = entity.getId();
@@ -23,6 +37,8 @@ public class PostDTO {
         this.username = entity.getUser().getUsername();
         this.profile_pic = entity.getUser().getImage_url();
     }
+
+
 
     public PostDTO() {
     }
@@ -53,5 +69,13 @@ public class PostDTO {
 
     public String getProfile_pic() {
         return profile_pic;
+    }
+
+    public Long getLikeQuantity() {
+        return likeQuantity;
+    }
+
+    public Long getCommentsQuantity() {
+        return commentsQuantity;
     }
 }
