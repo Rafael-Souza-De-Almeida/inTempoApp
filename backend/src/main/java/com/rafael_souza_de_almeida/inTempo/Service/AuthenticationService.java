@@ -35,6 +35,14 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public UserDTO userData(HttpServletRequest request) throws UserNotFoundException {
+        String user_id = jwtService.extractIdFromCookie(request);
+
+        User user = userRepository.findById(user_id).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+
+        return new UserDTO(user);
+    }
+
     public void authenticate(LoginRequestDTO dto, HttpServletResponse response) {
 
         Optional<User> possibleUser = userRepository.findByEmail(dto.getEmail());
@@ -48,7 +56,7 @@ public class AuthenticationService {
         boolean isPasswordCorrect = passwordEncoder.matches(dto.getPassword(), user.getPassword());
 
         if(!isPasswordCorrect) {
-            throw new RuntimeException("Senha incorreta!");
+            throw new RuntimeException("Email ous enha incorretas");
         }
 
          jwtService.generateToken(user, response);

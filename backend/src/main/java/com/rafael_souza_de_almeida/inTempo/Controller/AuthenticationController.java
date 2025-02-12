@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
@@ -31,13 +32,25 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    @GetMapping
+    public ResponseEntity<?> userData(HttpServletRequest request) {
+
+        try {
+            var result = authenticationService.userData(request);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch(UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+
+    }
+
     @PostMapping("/sign_in")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequestDTO dto, HttpServletResponse response) {
         try {
             authenticationService.authenticate(dto, response);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário ou senha incorretos!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Usuário ou senha incorretos!"));
         }
     }
 

@@ -45,13 +45,13 @@ public class JwtService {
 
         ResponseCookie cookie = ResponseCookie.from("jwt_token", token)
                 .httpOnly(true)
-                .secure(true)
                 .path("/")
+                .secure(true)
                 .maxAge(expiry)
                 .sameSite("Strict")
                 .build();
 
-        response.addHeader("Set-cookie", cookie.toString());
+        response.addHeader("Set-Cookie", cookie.toString());
 
     }
 
