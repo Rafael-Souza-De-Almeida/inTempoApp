@@ -42,6 +42,22 @@ export class AuthService {
 
     return await response.json();
   }
+
+  async logOut(): Promise<void> {
+    const newUrl = this.url + "/sign_out";
+
+    const response = await fetch(newUrl, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Não foi possível sair de sua conta");
+    }
+  }
 }
 
 export const useAuth = () => new AuthService();

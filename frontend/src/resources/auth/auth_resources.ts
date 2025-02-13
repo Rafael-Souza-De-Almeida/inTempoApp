@@ -4,7 +4,7 @@ export interface User {
   email: string;
   password: string;
   username: string;
-  profile_pic?: string | null;
+  image_url?: string | null;
 }
 
 export interface LoginRequest {

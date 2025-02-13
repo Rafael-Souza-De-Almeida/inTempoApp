@@ -18,7 +18,7 @@ export function PostTemplate({ post }: PostProps) {
         <p className="font-semibold text-lg">@{post.username}</p>
       </div>
 
-      <p className="text-gray-300">{post.content}</p>
+      <p>{post.content}</p>
 
       <div className="flex justify-between items-center text-gray-400 text-sm">
         <div className="flex gap-2 items-center hover:text-gray-300 cursor-pointer">
