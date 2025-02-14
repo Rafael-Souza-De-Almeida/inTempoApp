@@ -21,6 +21,7 @@ import { useAuth } from "@/resources/auth/auth_service";
 import { useNotification } from "../notification";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import { useIsLoggedIn } from "./LoginContext";
 
 export function LoginForm({
   className,
@@ -35,10 +36,12 @@ export function LoginForm({
   const auth = useAuth();
   const notification = useNotification();
   const router = useRouter();
+  const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
 
   async function onSubmit() {
     try {
       await auth.authenticate(values);
+      setIsLoggedIn(true);
       router.push("/");
       notification.notify("Seja bem-vindo!", "success");
     } catch (error: any) {

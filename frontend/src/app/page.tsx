@@ -1,5 +1,11 @@
+"use client";
+
+import { CreatePost } from "@/components/post/CreatePost";
 import { PostList } from "@/components/post/PostList";
 import Sidebar from "@/components/sidebar/Sidebar";
+import { User } from "@/resources/auth/auth_resources";
+import { useAuth } from "@/resources/auth/auth_service";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   return (
@@ -8,6 +14,7 @@ export default function Home() {
         <Sidebar />
       </div>
       <div>
+        <CreatePost />
         <PostList />
       </div>
     </div>
