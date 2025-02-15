@@ -10,37 +10,28 @@ import { useNotification } from "../notification";
 import { User } from "@/resources/auth/auth_resources";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useIsLoggedIn } from "../login/LoginContext";
+import { useLoading } from "../loading/loadingContext";
+import { Loading } from "../loading/loading";
 
 export default function Sidebar() {
   const auth = useAuth();
   const notification = useNotification();
-  const [userData, setUserData] = useState<User>();
   const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
+  const { loading, setLoading } = useLoading();
 
   async function handleLogout() {
     try {
+      setLoading(true);
       await auth.logOut();
       setIsLoggedIn(false);
       notification.notify("Sessão encerrada", "success");
     } catch (error: any) {
       const message = error.message;
       notification.notify(message, "error");
+    } finally {
+      setLoading(false);
     }
   }
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const result = await auth.getUserData();
-        setUserData(result);
-        setIsLoggedIn(true);
-      } catch (error: any) {
-        setIsLoggedIn(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   return (
     <nav className="flex flex-auto m-auto w-full px-4 sticky">
@@ -112,30 +103,6 @@ export default function Sidebar() {
 
             <div>Entrar</div>
           </Link>
-        )}
-
-        {isLoggedIn ? (
-          <Link
-            href="/"
-            className="flex max-w-[256px] gap-4 mt-4 p-4  items-center"
-          >
-            <div>
-              <Avatar className="w-10 h-10">
-                <AvatarImage
-                  src={userData?.image_url || ""}
-                  alt="User profile picture"
-                />
-                <AvatarFallback>{userData?.name.slice(0, 2)}</AvatarFallback>
-              </Avatar>
-            </div>
-
-            <div className="flex flex-col items-center">
-              <div>{userData?.name}</div>
-              <div className="text-gray-500 text-sm">@{userData?.username}</div>
-            </div>
-          </Link>
-        ) : (
-          ""
         )}
       </div>
     </nav>

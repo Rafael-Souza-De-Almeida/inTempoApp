@@ -8,38 +8,31 @@ import { User } from "@/resources/auth/auth_resources";
 import { useEffect, useState } from "react";
 import { usePost } from "@/resources/post/post_service";
 import { useNotification } from "../notification";
+import { useIsLoggedIn } from "../login/LoginContext";
 
-export function CreatePost() {
-  const [userData, setUserData] = useState<User>();
+interface CreatePostProps {
+  userData: User | undefined;
+}
+
+export function CreatePost({ userData }: CreatePostProps) {
   const [content, setContent] = useState<string>("");
   const auth = useAuth();
   const post_service = usePost();
   const notification = useNotification();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const result = await auth.getUserData();
-        setUserData(result);
-      } catch (error: any) {
-        return;
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
 
   async function createNewPost() {
     try {
-      const result = await post_service.createPost(content);
+      await post_service.createPost(content);
       notification.notify("Post criado com sucesso", "success");
+      setContent("");
     } catch (error: any) {
       const message = error.message;
       notification.notify(message, "error");
     }
   }
 
-  return (
+  return isLoggedIn ? (
     <SplittedContainer
       profile_pic={userData?.image_url}
       name={userData?.name}
@@ -55,5 +48,7 @@ export function CreatePost() {
         <Button onClick={() => createNewPost()}>Criar post</Button>
       </div>
     </SplittedContainer>
+  ) : (
+    <h1 className="mb-12">Faça login para adicionar um post...</h1>
   );
 }
