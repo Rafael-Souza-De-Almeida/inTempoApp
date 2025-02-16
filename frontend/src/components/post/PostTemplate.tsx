@@ -1,13 +1,80 @@
+"use client";
+
 import { Post } from "@/resources/post/post_resources";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Bookmark, Heart, MessageCircle } from "lucide-react";
 import { SplittedContainer } from "./SplittedContainer";
+import { Like } from "@/resources/like/like_resources";
+import { useLike } from "@/resources/like/like_service";
+import { useIsLoggedIn } from "../login/LoginContext";
+import { useNotification } from "../notification";
+import { useState } from "react";
 
 interface PostProps {
   post: Post;
+  userLikes: Map<number, number>;
+  setUserLikes: React.Dispatch<React.SetStateAction<Map<number, number>>>;
 }
 
-export function PostTemplate({ post }: PostProps) {
+export function PostTemplate({ post, userLikes, setUserLikes }: PostProps) {
+  const likeService = useLike();
+  const [likeQuantity, setLikeQuantity] = useState(post.likeQuantity);
+  const { isLoggedIn } = useIsLoggedIn();
+  const notification = useNotification();
+
+  const handleAddLike = async (postId: number): Promise<Like | undefined> => {
+    if (!isLoggedIn) {
+      notification.notify(
+        "É preciso entrar em sua conta para curtir esse post",
+        "error"
+      );
+      return;
+    }
+    try {
+      const result = await likeService.save(postId);
+      return result;
+    } catch (error: any) {
+      const message = error.message;
+      notification.notify(message, "error");
+    }
+  };
+
+  const handleRemoveLike = async (
+    likeId: number | undefined
+  ): Promise<void> => {
+    try {
+      await likeService.delete(likeId);
+    } catch (error: any) {
+      const message = error.message;
+      notification.notify(message, "error");
+    }
+  };
+
+  const handleLike = async () => {
+    if (userLikes.get(post.id)) {
+      await handleRemoveLike(userLikes.get(post.id));
+      setUserLikes((prev) => {
+        const newLikes = new Map(prev);
+        newLikes.delete(post.id);
+        return newLikes;
+      });
+
+      setLikeQuantity((prev) => prev - 1);
+    } else {
+      const like = await handleAddLike(post.id);
+
+      if (!like) {
+        return;
+      }
+      setUserLikes((prev) => {
+        const newLikes = new Map(prev);
+        newLikes.set(post.id, like.id);
+        return newLikes;
+      });
+
+      setLikeQuantity((prev) => prev + 1);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md">
       <SplittedContainer
@@ -25,8 +92,12 @@ export function PostTemplate({ post }: PostProps) {
           </div>
 
           <div className="flex gap-2 items-center hover:text-red-500 cursor-pointer">
-            <Heart size={18} />
-            <p>{post.likeQuantity}</p>
+            {userLikes.get(post.id) ? (
+              <Heart onClick={handleLike} size={18} fill="red" color="red" />
+            ) : (
+              <Heart onClick={handleLike} size={18} />
+            )}
+            <p>{likeQuantity}</p>
           </div>
 
           <div className="flex gap-2 items-center hover:text-gray-300 cursor-pointer">
