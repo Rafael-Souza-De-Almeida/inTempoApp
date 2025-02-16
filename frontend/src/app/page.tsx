@@ -9,6 +9,7 @@ import { PostList } from "@/components/post/PostList";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { User } from "@/resources/auth/auth_resources";
 import { useAuth } from "@/resources/auth/auth_service";
+import { useBookmark } from "@/resources/Bookmark/bookmark_service";
 import { useLike } from "@/resources/like/like_service";
 import { Post } from "@/resources/post/post_resources";
 import { usePost } from "@/resources/post/post_service";
@@ -21,12 +22,15 @@ export default function Home() {
   const [userLikes, setUserLikes] = useState<Map<number, number>>(
     new Map<number, number>()
   );
-
+  const [userBookmarks, setUserBookmarks] = useState<Map<number, number>>(
+    new Map<number, number>()
+  );
   const [posts, setPosts] = useState<Post[] | undefined>();
   const auth = useAuth();
   const likeService = useLike();
   const notification = useNotification();
   const postService = usePost();
+  const bookmarkService = useBookmark();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,18 +46,6 @@ export default function Home() {
       }
     };
 
-    const listAllLikes = async () => {
-      try {
-        const result = await likeService.getAllUserLikes();
-        result.map((like) =>
-          setUserLikes(userLikes.set(like.post_id, like.id))
-        );
-        console.log(userLikes);
-      } catch (error: any) {
-        return;
-      }
-    };
-
     const fetchAllPosts = async () => {
       try {
         const result = await postService.getAllPosts();
@@ -64,10 +56,33 @@ export default function Home() {
       }
     };
 
-    fetchAllPosts();
+    const listAllLikes = async () => {
+      try {
+        const result = await likeService.getAllUserLikes();
+        result.map((like) =>
+          setUserLikes(userLikes.set(like.post_id, like.id))
+        );
+      } catch (error: any) {
+        return;
+      }
+    };
 
+    const listAllBookmarks = async () => {
+      try {
+        const result = await bookmarkService.getAllUserBookmarks();
+        result.map((bookmark) =>
+          setUserBookmarks(userBookmarks.set(bookmark.post_id, bookmark.id))
+        );
+      } catch (error: any) {
+        const message = error.message;
+        console.log(message);
+      }
+    };
+
+    fetchAllPosts();
     fetchUser();
     listAllLikes();
+    listAllBookmarks();
   }, []);
 
   if (loading || isLoggedIn === null) {
@@ -85,6 +100,8 @@ export default function Home() {
           posts={posts}
           userLikes={userLikes}
           setUserLikes={setUserLikes}
+          userBookmarks={userBookmarks}
+          setUserBookmarks={setUserBookmarks}
         />
       </div>
     </div>

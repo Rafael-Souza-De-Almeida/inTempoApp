@@ -8,18 +8,28 @@ import { useLike } from "@/resources/like/like_service";
 import { useIsLoggedIn } from "../login/LoginContext";
 import { useNotification } from "../notification";
 import { useState } from "react";
+import { useBookmark } from "@/resources/Bookmark/bookmark_service";
 
 interface PostProps {
   post: Post;
   userLikes: Map<number, number>;
   setUserLikes: React.Dispatch<React.SetStateAction<Map<number, number>>>;
+  userBookmarks: Map<number, number>;
+  setUserBookmarks: React.Dispatch<React.SetStateAction<Map<number, number>>>;
 }
 
-export function PostTemplate({ post, userLikes, setUserLikes }: PostProps) {
+export function PostTemplate({
+  post,
+  userLikes,
+  setUserLikes,
+  userBookmarks,
+  setUserBookmarks,
+}: PostProps) {
   const likeService = useLike();
   const [likeQuantity, setLikeQuantity] = useState(post.likeQuantity);
   const { isLoggedIn } = useIsLoggedIn();
   const notification = useNotification();
+  const bookmarkService = useBookmark();
 
   const handleAddLike = async (postId: number): Promise<Like | undefined> => {
     if (!isLoggedIn) {
@@ -75,6 +85,52 @@ export function PostTemplate({ post, userLikes, setUserLikes }: PostProps) {
     }
   };
 
+  const handleAddBookmark = async (postId: number) => {
+    if (!isLoggedIn) {
+      notification.notify("Faça login para adicionar aos favoritos", "error");
+      return;
+    }
+
+    try {
+      const result = await bookmarkService.save(postId);
+      return result;
+    } catch (error: any) {
+      const message = error.message;
+      notification.notify(message, "error");
+    }
+  };
+  const handleRemoveBookmark = async (bookmarkId: number | undefined) => {
+    try {
+      await bookmarkService.delete(bookmarkId);
+    } catch (error: any) {
+      const message = error.message;
+      notification.notify(message, "error");
+    }
+  };
+
+  const handleBookmark = async () => {
+    if (userBookmarks.get(post.id)) {
+      await handleRemoveBookmark(userBookmarks.get(post.id));
+      setUserBookmarks((prev) => {
+        const newUserBookmarks = new Map(prev);
+        newUserBookmarks.delete(post.id);
+        return newUserBookmarks;
+      });
+    } else {
+      const bookmark = await handleAddBookmark(post.id);
+
+      if (!bookmark) {
+        return;
+      }
+
+      setUserBookmarks((prev) => {
+        const newUserBookmarks = new Map(prev);
+        newUserBookmarks.set(post.id, bookmark.id);
+        return newUserBookmarks;
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md">
       <SplittedContainer
@@ -101,7 +157,16 @@ export function PostTemplate({ post, userLikes, setUserLikes }: PostProps) {
           </div>
 
           <div className="flex gap-2 items-center hover:text-gray-300 cursor-pointer">
-            <Bookmark size={18} />
+            {userBookmarks.get(post.id) ? (
+              <Bookmark
+                onClick={handleBookmark}
+                size={18}
+                fill="white"
+                color="white"
+              />
+            ) : (
+              <Bookmark size={18} onClick={handleBookmark} />
+            )}
           </div>
         </div>
       </SplittedContainer>
