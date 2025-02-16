@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/posts")
@@ -48,6 +49,18 @@ public class PostController {
         } catch(PostNotFoundException | AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/show/{id}")
+    public ResponseEntity<?> show(@PathVariable Long id) {
+
+        try {
+            var result = postService.show(id);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch(PostNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        }
+
     }
 
     @PutMapping("/update/{id}")

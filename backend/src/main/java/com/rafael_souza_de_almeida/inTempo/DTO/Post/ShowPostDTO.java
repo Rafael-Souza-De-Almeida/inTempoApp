@@ -1,10 +1,14 @@
 package com.rafael_souza_de_almeida.inTempo.DTO.Post;
 
+import com.rafael_souza_de_almeida.inTempo.DTO.Comment.CommentDTO;
+import com.rafael_souza_de_almeida.inTempo.Entity.Comment;
 import com.rafael_souza_de_almeida.inTempo.Entity.Post;
+import org.hibernate.annotations.Comments;
 
 import java.util.Date;
+import java.util.List;
 
-public class PostDTO {
+public class ShowPostDTO {
 
     private Long id;
     private String content;
@@ -16,8 +20,9 @@ public class PostDTO {
     private String profile_pic;
     private Long likeQuantity;
     private Long commentsQuantity;
+    private List<CommentDTO> comments;
 
-    public PostDTO(Post entity, Long likeQuantity, Long commentsQuantity) {
+    public ShowPostDTO(Post entity, Long likeQuantity, Long commentsQuantity, List<CommentDTO> comments) {
         this.id = entity.getId();
         this.content = entity.getContent();
         this.created_at = entity.getCreated_at();
@@ -28,21 +33,11 @@ public class PostDTO {
         this.likeQuantity = likeQuantity;
         this.commentsQuantity = commentsQuantity;
         this.profile_pic = entity.getUser().getImage_url();
+        this.comments = comments;
+
     }
 
-    public PostDTO(Post entity) {
-        this.id = entity.getId();
-        this.content = entity.getContent();
-        this.created_at = entity.getCreated_at();
-        this.updated_at = entity.getUpdated_at();
-        this.user_id = entity.getUser().getId();
-        this.username = entity.getUser().getUsername();
-        this.profile_pic = entity.getUser().getImage_url();
-    }
-
-
-
-    public PostDTO() {
+    public ShowPostDTO() {
     }
 
     public Long getId() {
@@ -69,6 +64,10 @@ public class PostDTO {
         return username;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getProfile_pic() {
         return profile_pic;
     }
@@ -81,7 +80,7 @@ public class PostDTO {
         return commentsQuantity;
     }
 
-    public String getName() {
-        return name;
+    public List<CommentDTO> getComments() {
+        return comments;
     }
 }

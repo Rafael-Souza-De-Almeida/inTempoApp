@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(HttpMethod.PUT,"/auth/update_account").authenticated()
                                 .requestMatchers("/posts").permitAll()
+                                .requestMatchers("/posts/show/**").permitAll()
                                 .requestMatchers( "/posts/**").authenticated()
                                 .requestMatchers("/like").authenticated()
                                 .requestMatchers("/bookmark").authenticated()

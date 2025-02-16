@@ -1,7 +1,10 @@
 package com.rafael_souza_de_almeida.inTempo.Service;
 
+import com.rafael_souza_de_almeida.inTempo.DTO.Comment.CommentDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.Post.CreateOrEditPostDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.Post.PostDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.Post.ShowPostDTO;
+import com.rafael_souza_de_almeida.inTempo.Entity.Comment;
 import com.rafael_souza_de_almeida.inTempo.Entity.Post;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.PostNotFoundException;
@@ -16,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -41,7 +47,7 @@ public class PostService {
         return posts.
                 stream().map(post -> new PostDTO(
                         post, likeRepository.likeQuantity(post.getId()), commentRepository.commentsQuantity(post.getId()))
-                ).toList();
+                ).sorted(Comparator.comparing(PostDTO::getCreated_at).reversed()).toList();
     }
 
     public PostDTO save(CreateOrEditPostDTO dto, HttpServletRequest request) throws UserNotFoundException, BadRequestException {
@@ -61,6 +67,18 @@ public class PostService {
 
         return new PostDTO(post);
 
+
+    }
+
+    public ShowPostDTO show(Long id) throws PostNotFoundException {
+
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post não encontrado"));
+
+        Long likeQuantity = likeRepository.likeQuantity(id);
+        Long commentsQuantity = commentRepository.commentsQuantity(id);
+        List<CommentDTO> postComments = commentRepository.findAllPostComments(id).stream().map(CommentDTO::new).toList();
+
+        return new ShowPostDTO(post, likeQuantity, commentsQuantity, postComments);
 
     }
 
