@@ -1,4 +1,4 @@
-import { Post } from "./post_resources";
+import { Post, ShowPostAttributes } from "./post_resources";
 
 export class PostService {
   url = "http://localhost:8080/posts";
@@ -30,6 +30,18 @@ export class PostService {
 
     if (!response.ok) {
       throw new Error("Não foi possível fazer o login");
+    }
+
+    return await response.json();
+  }
+
+  async showPost(postId: number): Promise<ShowPostAttributes> {
+    const newUrl = this.url + `/show/${postId}`;
+
+    const response = await fetch(newUrl);
+
+    if (!response.ok) {
+      throw new Error("Não foi possível achar o post");
     }
 
     return await response.json();

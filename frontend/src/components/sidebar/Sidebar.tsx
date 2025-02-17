@@ -34,7 +34,7 @@ export default function Sidebar() {
   }
 
   return (
-    <nav className="flex flex-auto m-auto w-full px-4 sticky">
+    <nav className="flex flex-auto m-auto w-full px-4 ">
       <div className="flex flex-col gap-2">
         <Link href="/" className="flex max-w-[256px] gap-4 p-4 rounded-full ">
           <div>

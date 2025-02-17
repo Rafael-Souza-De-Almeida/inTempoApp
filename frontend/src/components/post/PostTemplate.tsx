@@ -9,6 +9,7 @@ import { useIsLoggedIn } from "../login/LoginContext";
 import { useNotification } from "../notification";
 import { useState } from "react";
 import { useBookmark } from "@/resources/Bookmark/bookmark_service";
+import { useRouter } from "next/navigation";
 
 interface PostProps {
   post: Post;
@@ -30,6 +31,7 @@ export function PostTemplate({
   const { isLoggedIn } = useIsLoggedIn();
   const notification = useNotification();
   const bookmarkService = useBookmark();
+  const router = useRouter();
 
   const handleAddLike = async (postId: number): Promise<Like | undefined> => {
     if (!isLoggedIn) {
@@ -60,7 +62,7 @@ export function PostTemplate({
   };
 
   const handleLike = async () => {
-    if (userLikes.get(post.id)) {
+    if (userLikes.has(post.id)) {
       await handleRemoveLike(userLikes.get(post.id));
       setUserLikes((prev) => {
         const newLikes = new Map(prev);
@@ -109,7 +111,7 @@ export function PostTemplate({
   };
 
   const handleBookmark = async () => {
-    if (userBookmarks.get(post.id)) {
+    if (userBookmarks.has(post.id)) {
       await handleRemoveBookmark(userBookmarks.get(post.id));
       setUserBookmarks((prev) => {
         const newUserBookmarks = new Map(prev);
@@ -132,14 +134,19 @@ export function PostTemplate({
   };
 
   return (
-    <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md">
+    <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md cursor-pointer">
       <SplittedContainer
         profile_pic={post.profile_pic}
         name={post.name}
         classname="flex-1 space-y-4"
       >
-        <p className="font-semibold text-lg">@{post.username}</p>
-        <p>{post.content}</p>
+        <div
+          onClick={() => router.push(`/post/${post.id}`)}
+          className="space-y-4"
+        >
+          <p className="font-semibold text-lg">@{post.username}</p>
+          <p>{post.content}</p>
+        </div>
 
         <div className="flex justify-between items-center text-gray-400 text-sm">
           <div className="flex gap-2 items-center hover:text-gray-300 cursor-pointer">
