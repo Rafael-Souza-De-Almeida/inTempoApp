@@ -3,6 +3,8 @@ package com.rafael_souza_de_almeida.inTempo.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users_tb")
 public class User {
@@ -23,6 +25,22 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> followers;
+
+
     @Lob
     @Column
     private byte[] profile_pic;
@@ -36,12 +54,17 @@ public class User {
     public User() {
     }
 
-    public User(String id, String name, String email, String username, String password, byte[] profile_pic, String profilePicType, String image_url) {
+    public User(String id, String name, String email, String username, String password, List<Post> posts, List<Like> likes, List<Bookmark> bookmarks, List<Comment> comments, List<Comment> followers, byte[] profile_pic, String profilePicType, String image_url) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.posts = posts;
+        this.likes = likes;
+        this.bookmarks = bookmarks;
+        this.comments = comments;
+        this.followers = followers;
         this.profile_pic = profile_pic;
         this.profilePicType = profilePicType;
         this.image_url = image_url;
@@ -51,6 +74,9 @@ public class User {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -84,6 +110,14 @@ public class User {
         this.password = password;
     }
 
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
     public byte[] getProfile_pic() {
         return profile_pic;
     }
@@ -106,5 +140,37 @@ public class User {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
+    public List<Bookmark> getBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(List<Bookmark> bookmarks) {
+        this.bookmarks = bookmarks;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Comment> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Comment> followers) {
+        this.followers = followers;
     }
 }

@@ -10,6 +10,7 @@ public class CommentDTO {
     private Long post_id;
     private String content;
     private String profile_pic;
+    private String name;
 
     
     public CommentDTO(Comment entity) {
@@ -19,6 +20,7 @@ public class CommentDTO {
         this.post_id = entity.getPost().getId();
         this.content = entity.getContent();
         this.profile_pic = entity.getUser().getImage_url();
+        this.name = entity.getUser().getName();
     }
 
     public CommentDTO() {
@@ -46,5 +48,9 @@ public class CommentDTO {
 
     public String getProfile_pic() {
         return profile_pic;
+    }
+
+    public String getName() {
+        return name;
     }
 }
