@@ -1,9 +1,14 @@
+"use client";
+
 import { ShowPostAttributes } from "@/resources/post/post_resources";
 import { comment } from "postcss";
 import { SplittedContainer } from "./SplittedContainer";
 import { Bookmark, Heart, MessageCircle } from "lucide-react";
 import { CommentList } from "../comment/commentList";
 import { CreateComment } from "../comment/createComment";
+import { useUserLikes } from "./UserLikesContext";
+import { useState } from "react";
+import { useIsLoggedIn } from "../login/LoginContext";
 
 interface ShowPostProps {
   post: ShowPostAttributes | undefined;
@@ -16,6 +21,10 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
     return;
   }
 
+  const { userLikes, handleLike } = useUserLikes();
+  const [likeQuantity, setLikeQuantity] = useState(post.likeQuantity);
+  const { isLoggedIn } = useIsLoggedIn();
+
   return (
     <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md ">
       <SplittedContainer
@@ -23,7 +32,7 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
         name={post?.name}
         classname="items-center"
       >
-        <p>@{post?.username}</p>
+        <p className="font-semibold">@{post?.username}</p>
 
         <div className="flex flex-col mt-4 cursor-pointer">
           <p> {post?.content} </p>
@@ -36,8 +45,32 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
           </div>
 
           <div className="flex items-center gap-1 hover:text-red-500 cursor-pointer transition-all">
-            <Heart size={18} />
-            <p>{post?.likeQuantity}</p>
+            {userLikes.get(post.id) ? (
+              <div className="flex items-center gap-2">
+                <Heart
+                  onClick={() => {
+                    handleLike(post);
+                    setLikeQuantity((prev) => prev - 1);
+                  }}
+                  size={18}
+                  fill="red"
+                  color="red"
+                />
+                <p>{likeQuantity}</p>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Heart
+                  size={18}
+                  onClick={() => {
+                    handleLike(post);
+                    if (!isLoggedIn) return;
+                    setLikeQuantity((prev) => prev + 1);
+                  }}
+                />
+                <p>{likeQuantity}</p>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer transition-all">
@@ -45,7 +78,7 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
           </div>
         </div>
 
-        <hr className="mt-8" />
+        <hr className="mt-4" />
 
         <div className="w-[450px] mt-8">
           <CreateComment profile_pic={profile_pic} name={name} />

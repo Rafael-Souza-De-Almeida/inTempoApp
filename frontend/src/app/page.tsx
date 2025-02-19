@@ -6,6 +6,7 @@ import { useIsLoggedIn } from "@/components/login/LoginContext";
 import { useNotification } from "@/components/notification";
 import { CreatePost } from "@/components/post/CreatePost";
 import { PostList } from "@/components/post/PostList";
+import { useUserLikes } from "@/components/post/UserLikesContext";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { User } from "@/resources/auth/auth_resources";
 import { useAuth } from "@/resources/auth/auth_service";
@@ -19,9 +20,7 @@ export default function Home() {
   const { loading, setLoading } = useLoading();
   const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
   const [userData, setUserData] = useState<User>();
-  const [userLikes, setUserLikes] = useState<Map<number, number>>(
-    new Map<number, number>()
-  );
+  const { userLikes, setUserLikes } = useUserLikes();
   const [userBookmarks, setUserBookmarks] = useState<Map<number, number>>(
     new Map<number, number>()
   );
@@ -56,17 +55,6 @@ export default function Home() {
       }
     };
 
-    const listAllLikes = async () => {
-      try {
-        const result = await likeService.getAllUserLikes();
-        result.map((like) =>
-          setUserLikes(userLikes.set(like.post_id, like.id))
-        );
-      } catch (error: any) {
-        return;
-      }
-    };
-
     const listAllBookmarks = async () => {
       try {
         const result = await bookmarkService.getAllUserBookmarks();
@@ -81,7 +69,7 @@ export default function Home() {
 
     fetchAllPosts();
     fetchUser();
-    listAllLikes();
+
     listAllBookmarks();
   }, []);
 
@@ -95,11 +83,9 @@ export default function Home() {
         <Sidebar />
       </div>
       <div>
-        <CreatePost userData={userData} />
+        <CreatePost userData={userData} posts={posts} setPosts={setPosts} />
         <PostList
           posts={posts}
-          userLikes={userLikes}
-          setUserLikes={setUserLikes}
           userBookmarks={userBookmarks}
           setUserBookmarks={setUserBookmarks}
         />

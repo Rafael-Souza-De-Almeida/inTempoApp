@@ -9,23 +9,40 @@ import { useEffect, useState } from "react";
 import { usePost } from "@/resources/post/post_service";
 import { useNotification } from "../notification";
 import { useIsLoggedIn } from "../login/LoginContext";
+import { useFormik } from "formik";
+import {
+  formScheme,
+  PostAttributes,
+  validationSchema,
+} from "@/validation/postValidation";
+import { Post } from "@/resources/post/post_resources";
 
 interface CreatePostProps {
   userData: User | undefined;
+  posts: Post[] | undefined;
+  setPosts: React.Dispatch<React.SetStateAction<Post[] | undefined>>;
 }
 
-export function CreatePost({ userData }: CreatePostProps) {
-  const [content, setContent] = useState<string>("");
-  const auth = useAuth();
+export function CreatePost({ userData, posts, setPosts }: CreatePostProps) {
   const post_service = usePost();
   const notification = useNotification();
-  const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
 
-  async function createNewPost() {
+  const { values, handleSubmit, handleChange, errors } =
+    useFormik<PostAttributes>({
+      initialValues: formScheme,
+      validationSchema: validationSchema,
+      onSubmit: async (values, { resetForm }) => {
+        await createNewPost(resetForm);
+      },
+    });
+
+  async function createNewPost(resetForm: () => void) {
     try {
-      await post_service.createPost(content);
+      const result = await post_service.createPost(values.content);
       notification.notify("Post criado com sucesso", "success");
-      setContent("");
+      posts?.map(() => setPosts([result, ...posts]));
+      resetForm();
     } catch (error: any) {
       const message = error.message;
       notification.notify(message, "error");
@@ -39,13 +56,22 @@ export function CreatePost({ userData }: CreatePostProps) {
       classname="mb-12"
     >
       <div className="flex flex-col space-y-4">
-        <Textarea
-          className="w-[500px] h-[100px]"
-          placeholder="Escreva o que estiver pensando..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <Button onClick={() => createNewPost()}>Criar post</Button>
+        <form onSubmit={handleSubmit}>
+          {errors.content ? (
+            <p className="text-red-500 text-sm mb-4">{errors.content}</p>
+          ) : (
+            ""
+          )}
+          <Textarea
+            className="w-[500px] h-[100px]"
+            placeholder="Escreva o que estiver pensando..."
+            value={values.content}
+            onChange={handleChange("content")}
+          />
+          <Button className="w-full mt-4" type="submit">
+            Criar post
+          </Button>
+        </form>
       </div>
     </SplittedContainer>
   ) : (

@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/provider/theme-provider";
 import { ToastContainer } from "react-toastify";
 import { LoginProvider } from "@/components/login/LoginContext";
 import { LoadingProvider } from "@/components/loading/loadingContext";
+import { UserLikesProvider } from "@/components/post/UserLikesContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LoadingProvider>
-            <LoginProvider>{children}</LoginProvider>
+            <LoginProvider>
+              <UserLikesProvider>{children}</UserLikesProvider>
+            </LoginProvider>
           </LoadingProvider>
         </ThemeProvider>
 
