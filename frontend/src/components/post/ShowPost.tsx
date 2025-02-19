@@ -10,6 +10,7 @@ import { useUserLikes } from "./UserLikesContext";
 import { useState } from "react";
 import { useIsLoggedIn } from "../login/LoginContext";
 import { useUserBookmarks } from "./UserBookmarkContext";
+import { Comment } from "@/resources/comment/comment_resources";
 
 interface ShowPostProps {
   post: ShowPostAttributes | undefined;
@@ -26,6 +27,7 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
   const [likeQuantity, setLikeQuantity] = useState(post.likeQuantity);
   const { userBookmarks, handleBookmark } = useUserBookmarks();
   const { isLoggedIn } = useIsLoggedIn();
+  const [comments, setComments] = useState<Comment[]>(post.comments || []);
 
   return (
     <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md ">
@@ -92,14 +94,20 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
         <hr className="mt-4" />
 
         <div className="w-[450px] mt-8">
-          <CreateComment profile_pic={profile_pic} name={name} />
+          <CreateComment
+            post={post}
+            profile_pic={profile_pic}
+            name={name}
+            comments={comments}
+            setComments={setComments}
+          />
         </div>
 
-        {post.comments.length > 0 ? (
+        {comments.length > 0 ? (
           <div>
             <hr className="mt-8" />
             <div className="space-y-8 mt-8">
-              <CommentList comments={post?.comments} />
+              <CommentList comments={comments} />
             </div>
           </div>
         ) : (
