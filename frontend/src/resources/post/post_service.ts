@@ -29,7 +29,7 @@ export class PostService {
     });
 
     if (!response.ok) {
-      throw new Error("Não foi possível fazer o login");
+      throw new Error("Não foi possível criar o post");
     }
 
     return await response.json();
@@ -45,6 +45,22 @@ export class PostService {
     }
 
     return await response.json();
+  }
+
+  async delete(postId: number): Promise<void> {
+    const newUrl = this.url + `/${postId}`;
+
+    const response = await fetch(newUrl, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Não foi possível deletar o post");
+    }
   }
 }
 

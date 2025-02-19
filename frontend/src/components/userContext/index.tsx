@@ -51,7 +51,10 @@ export const UserDataProvider: React.FC<UserDataProps> = ({ children }) => {
     };
 
     fetchUser();
-  }, []);
+    if (!isLoggedIn) {
+      setUserData(undefined);
+    }
+  }, [isLoggedIn]);
 
   return (
     <UserDataContext.Provider

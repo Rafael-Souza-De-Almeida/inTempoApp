@@ -17,6 +17,7 @@ export interface ShowPostAttributes {
   created_at: string;
   username: string;
   name: string;
+  user_id: string;
   likeQuantity: number;
   commentsQuantity: number;
   profile_pic?: string;

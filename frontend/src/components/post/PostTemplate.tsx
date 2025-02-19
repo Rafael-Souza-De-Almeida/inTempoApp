@@ -46,54 +46,50 @@ export function PostTemplate({ post }: PostProps) {
         </div>
 
         <div className="flex justify-between items-center text-gray-400 text-sm">
-          <div className="flex gap-2 items-center hover:text-gray-300 cursor-pointer">
-            <MessageCircle
-              size={18}
-              onClick={() => router.push(`/post/${post.id}`)}
-            />
+          <div
+            onClick={() => router.push(`/post/${post.id}`)}
+            className="flex gap-2 items-center hover:text-gray-300 cursor-pointer"
+          >
+            <MessageCircle size={18} />
             <p>{post.commentsQuantity}</p>
           </div>
 
           <div className="flex gap-2 items-center hover:text-red-500 cursor-pointer">
             {userLikes.get(post.id) ? (
-              <div className="flex gap-2 items-center">
-                <Heart
-                  onClick={() => {
-                    handleLike(post);
+              <div
+                onClick={() => {
+                  handleLike(post);
 
-                    setLikeQuantity((prev) => prev - 1);
-                  }}
-                  size={18}
-                  fill="red"
-                  color="red"
-                />
+                  setLikeQuantity((prev) => prev - 1);
+                }}
+                className="flex gap-2 items-center"
+              >
+                <Heart size={18} fill="red" color="red" />
                 <p>{likeQuantity}</p>
               </div>
             ) : (
-              <div className="flex gap-2 items-center">
-                <Heart
-                  onClick={() => {
-                    handleLike(post);
-                    if (!isLoggedIn) return;
-                    setLikeQuantity((prev) => prev + 1);
-                  }}
-                  size={18}
-                />
+              <div
+                onClick={() => {
+                  handleLike(post);
+                  if (!isLoggedIn) return;
+                  setLikeQuantity((prev) => prev + 1);
+                }}
+                className="flex gap-2 items-center"
+              >
+                <Heart size={18} />
                 <p>{likeQuantity}</p>
               </div>
             )}
           </div>
 
-          <div className="flex gap-2 items-center hover:text-gray-300 cursor-pointer">
+          <div
+            onClick={() => handleBookmark(post)}
+            className="flex gap-2 items-center hover:text-gray-300 cursor-pointer"
+          >
             {userBookmarks.get(post.id) ? (
-              <Bookmark
-                onClick={() => handleBookmark(post)}
-                size={18}
-                fill="white"
-                color="white"
-              />
+              <Bookmark size={18} fill="white" color="white" />
             ) : (
-              <Bookmark size={18} onClick={() => handleBookmark(post)} />
+              <Bookmark size={18} />
             )}
           </div>
         </div>

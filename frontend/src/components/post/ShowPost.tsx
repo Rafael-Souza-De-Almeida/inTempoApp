@@ -13,12 +13,18 @@ import { useUserBookmarks } from "./UserBookmarkContext";
 import { Comment } from "@/resources/comment/comment_resources";
 import { TimeAgo } from "../timeAgo/timeAgo";
 import { useUserData } from "../userContext";
+import { usePost } from "@/resources/post/post_service";
+import { Trash2 } from "lucide-react";
+import { useRouter } from "next/router";
+import { useNotification } from "../notification";
+import { redirect } from "next/navigation";
 
 interface ShowPostProps {
   post: ShowPostAttributes | undefined;
+  handleDeletePost: (postId: number) => void;
 }
 
-export function ShowPost({ post }: ShowPostProps) {
+export function ShowPost({ post, handleDeletePost }: ShowPostProps) {
   if (!post) {
     return;
   }
@@ -40,6 +46,16 @@ export function ShowPost({ post }: ShowPostProps) {
         <div className="flex gap-4 items-center">
           <p className="font-semibold">@{post?.username}</p>
           <TimeAgo created_at={post.created_at} />
+          {userData?.id === post.user_id ? (
+            <Trash2
+              className="cursor-pointer"
+              color="red"
+              size={20}
+              onClick={() => handleDeletePost(post.id)}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="flex flex-col mt-2 cursor-pointer">
@@ -54,43 +70,39 @@ export function ShowPost({ post }: ShowPostProps) {
 
           <div className="flex items-center gap-1 hover:text-red-500 cursor-pointer transition-all">
             {userLikes.get(post.id) ? (
-              <div className="flex items-center gap-2">
-                <Heart
-                  onClick={() => {
-                    handleLike(post);
-                    setLikeQuantity((prev) => prev - 1);
-                  }}
-                  size={18}
-                  fill="red"
-                  color="red"
-                />
+              <div
+                onClick={() => {
+                  handleLike(post);
+                  setLikeQuantity((prev) => prev - 1);
+                }}
+                className="flex items-center gap-2"
+              >
+                <Heart size={18} fill="red" color="red" />
                 <p>{likeQuantity}</p>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <Heart
-                  size={18}
-                  onClick={() => {
-                    handleLike(post);
-                    if (!isLoggedIn) return;
-                    setLikeQuantity((prev) => prev + 1);
-                  }}
-                />
+              <div
+                onClick={() => {
+                  handleLike(post);
+                  if (!isLoggedIn) return;
+                  setLikeQuantity((prev) => prev + 1);
+                }}
+                className="flex items-center gap-2"
+              >
+                <Heart size={18} />
                 <p>{likeQuantity}</p>
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer transition-all">
+          <div
+            onClick={() => handleBookmark(post)}
+            className="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer transition-all"
+          >
             {userBookmarks.has(post.id) ? (
-              <Bookmark
-                size={18}
-                fill="white"
-                color="white"
-                onClick={() => handleBookmark(post)}
-              />
+              <Bookmark size={18} fill="white" color="white" />
             ) : (
-              <Bookmark size={18} onClick={() => handleBookmark(post)} />
+              <Bookmark size={18} />
             )}
           </div>
         </div>

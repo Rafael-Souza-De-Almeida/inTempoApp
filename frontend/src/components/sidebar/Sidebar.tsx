@@ -12,18 +12,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useIsLoggedIn } from "../login/LoginContext";
 import { useLoading } from "../loading/loadingContext";
 import { Loading } from "../loading/loading";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
   const auth = useAuth();
   const notification = useNotification();
   const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
   const { loading, setLoading } = useLoading();
+  const router = useRouter();
 
   async function handleLogout() {
     try {
       setLoading(true);
       await auth.logOut();
       setIsLoggedIn(false);
+      router.push("/login");
+      router.refresh();
       notification.notify("Sessão encerrada", "success");
     } catch (error: any) {
       const message = error.message;
@@ -82,7 +86,7 @@ export default function Sidebar() {
 
         {isLoggedIn ? (
           <Link
-            href="/login"
+            href="/"
             onClick={() => handleLogout()}
             className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
           >
