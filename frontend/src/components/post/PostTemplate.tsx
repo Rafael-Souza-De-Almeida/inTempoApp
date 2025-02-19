@@ -11,70 +11,18 @@ import { useState } from "react";
 import { useBookmark } from "@/resources/Bookmark/bookmark_service";
 import { useRouter } from "next/navigation";
 import { useUserLikes } from "./UserLikesContext";
+import { useUserBookmarks } from "./UserBookmarkContext";
 
 interface PostProps {
   post: Post;
-  userBookmarks: Map<number, number>;
-  setUserBookmarks: React.Dispatch<React.SetStateAction<Map<number, number>>>;
 }
 
-export function PostTemplate({
-  post,
-  userBookmarks,
-  setUserBookmarks,
-}: PostProps) {
+export function PostTemplate({ post }: PostProps) {
   const { isLoggedIn } = useIsLoggedIn();
-  const notification = useNotification();
-  const bookmarkService = useBookmark();
   const [likeQuantity, setLikeQuantity] = useState(post.likeQuantity);
   const { userLikes, handleLike } = useUserLikes();
+  const { userBookmarks, handleBookmark } = useUserBookmarks();
   const router = useRouter();
-
-  const handleAddBookmark = async (postId: number) => {
-    if (!isLoggedIn) {
-      notification.notify("Faça login para adicionar aos favoritos", "error");
-      return;
-    }
-
-    try {
-      const result = await bookmarkService.save(postId);
-      return result;
-    } catch (error: any) {
-      const message = error.message;
-      notification.notify(message, "error");
-    }
-  };
-  const handleRemoveBookmark = async (bookmarkId: number | undefined) => {
-    try {
-      await bookmarkService.delete(bookmarkId);
-    } catch (error: any) {
-      const message = error.message;
-      notification.notify(message, "error");
-    }
-  };
-
-  const handleBookmark = async () => {
-    if (userBookmarks.has(post.id)) {
-      await handleRemoveBookmark(userBookmarks.get(post.id));
-      setUserBookmarks((prev) => {
-        const newUserBookmarks = new Map(prev);
-        newUserBookmarks.delete(post.id);
-        return newUserBookmarks;
-      });
-    } else {
-      const bookmark = await handleAddBookmark(post.id);
-
-      if (!bookmark) {
-        return;
-      }
-
-      setUserBookmarks((prev) => {
-        const newUserBookmarks = new Map(prev);
-        newUserBookmarks.set(post.id, bookmark.id);
-        return newUserBookmarks;
-      });
-    }
-  };
 
   return (
     <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md cursor-pointer">
@@ -133,13 +81,13 @@ export function PostTemplate({
           <div className="flex gap-2 items-center hover:text-gray-300 cursor-pointer">
             {userBookmarks.get(post.id) ? (
               <Bookmark
-                onClick={handleBookmark}
+                onClick={() => handleBookmark(post)}
                 size={18}
                 fill="white"
                 color="white"
               />
             ) : (
-              <Bookmark size={18} onClick={handleBookmark} />
+              <Bookmark size={18} onClick={() => handleBookmark(post)} />
             )}
           </div>
         </div>

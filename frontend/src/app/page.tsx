@@ -20,16 +20,11 @@ export default function Home() {
   const { loading, setLoading } = useLoading();
   const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
   const [userData, setUserData] = useState<User>();
-  const { userLikes, setUserLikes } = useUserLikes();
-  const [userBookmarks, setUserBookmarks] = useState<Map<number, number>>(
-    new Map<number, number>()
-  );
+
   const [posts, setPosts] = useState<Post[] | undefined>();
   const auth = useAuth();
-  const likeService = useLike();
   const notification = useNotification();
   const postService = usePost();
-  const bookmarkService = useBookmark();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -55,22 +50,8 @@ export default function Home() {
       }
     };
 
-    const listAllBookmarks = async () => {
-      try {
-        const result = await bookmarkService.getAllUserBookmarks();
-        result.map((bookmark) =>
-          setUserBookmarks(userBookmarks.set(bookmark.post_id, bookmark.id))
-        );
-      } catch (error: any) {
-        const message = error.message;
-        console.log(message);
-      }
-    };
-
     fetchAllPosts();
     fetchUser();
-
-    listAllBookmarks();
   }, []);
 
   if (loading || isLoggedIn === null) {
@@ -84,11 +65,7 @@ export default function Home() {
       </div>
       <div>
         <CreatePost userData={userData} posts={posts} setPosts={setPosts} />
-        <PostList
-          posts={posts}
-          userBookmarks={userBookmarks}
-          setUserBookmarks={setUserBookmarks}
-        />
+        <PostList posts={posts} />
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import { CreateComment } from "../comment/createComment";
 import { useUserLikes } from "./UserLikesContext";
 import { useState } from "react";
 import { useIsLoggedIn } from "../login/LoginContext";
+import { useUserBookmarks } from "./UserBookmarkContext";
 
 interface ShowPostProps {
   post: ShowPostAttributes | undefined;
@@ -23,6 +24,7 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
 
   const { userLikes, handleLike } = useUserLikes();
   const [likeQuantity, setLikeQuantity] = useState(post.likeQuantity);
+  const { userBookmarks, handleBookmark } = useUserBookmarks();
   const { isLoggedIn } = useIsLoggedIn();
 
   return (
@@ -74,7 +76,16 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
           </div>
 
           <div className="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer transition-all">
-            <Bookmark size={18} />
+            {userBookmarks.has(post.id) ? (
+              <Bookmark
+                size={18}
+                fill="white"
+                color="white"
+                onClick={() => handleBookmark(post)}
+              />
+            ) : (
+              <Bookmark size={18} onClick={() => handleBookmark(post)} />
+            )}
           </div>
         </div>
 

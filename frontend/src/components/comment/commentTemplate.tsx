@@ -13,7 +13,7 @@ export function CommentTemplate({ comment }: CommentTemplate) {
         name={comment.name}
         classname=""
       >
-        <p>@{comment.username}</p>
+        <p className="font-semibold">@{comment.username}</p>
 
         <div className="flex flex-col mt-2">
           <p>{comment.content}</p>

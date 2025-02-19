@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { LoginProvider } from "@/components/login/LoginContext";
 import { LoadingProvider } from "@/components/loading/loadingContext";
 import { UserLikesProvider } from "@/components/post/UserLikesContext";
+import { UserBookmarkProvider } from "@/components/post/UserBookmarkContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,9 @@ export default function RootLayout({
         >
           <LoadingProvider>
             <LoginProvider>
-              <UserLikesProvider>{children}</UserLikesProvider>
+              <UserLikesProvider>
+                <UserBookmarkProvider>{children}</UserBookmarkProvider>
+              </UserLikesProvider>
             </LoginProvider>
           </LoadingProvider>
         </ThemeProvider>
