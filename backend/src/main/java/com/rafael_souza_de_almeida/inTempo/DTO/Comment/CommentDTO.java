@@ -2,6 +2,8 @@ package com.rafael_souza_de_almeida.inTempo.DTO.Comment;
 
 import com.rafael_souza_de_almeida.inTempo.Entity.Comment;
 
+import java.util.Date;
+
 public class CommentDTO {
 
     private Long id;
@@ -11,6 +13,7 @@ public class CommentDTO {
     private String content;
     private String profile_pic;
     private String name;
+    private Date created_at;
 
     
     public CommentDTO(Comment entity) {
@@ -21,6 +24,7 @@ public class CommentDTO {
         this.content = entity.getContent();
         this.profile_pic = entity.getUser().getImage_url();
         this.name = entity.getUser().getName();
+        this.created_at = entity.getCreated_at();
     }
 
     public CommentDTO() {
@@ -52,5 +56,9 @@ public class CommentDTO {
 
     public String getName() {
         return name;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
     }
 }

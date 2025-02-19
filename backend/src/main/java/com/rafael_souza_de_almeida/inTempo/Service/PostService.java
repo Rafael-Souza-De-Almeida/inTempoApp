@@ -76,7 +76,8 @@ public class PostService {
 
         Long likeQuantity = likeRepository.likeQuantity(id);
         Long commentsQuantity = commentRepository.commentsQuantity(id);
-        List<CommentDTO> postComments = commentRepository.findAllPostComments(id).stream().map(CommentDTO::new).toList();
+        List<CommentDTO> postComments = commentRepository.findAllPostComments(id).stream().map(CommentDTO::new)
+                .sorted(Comparator.comparing(CommentDTO::getCreated_at).reversed()).toList();
 
         return new ShowPostDTO(post, likeQuantity, commentsQuantity, postComments);
 

@@ -37,7 +37,7 @@ public class PostDTO {
         this.updated_at = entity.getUpdated_at();
         this.user_id = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
-        this.profile_pic = entity.getUser().getImage_url();
+        this.profile_pic = entity.getUser().getImage_url() != null ? entity.getUser().getProfilePicType() : "";
     }
 
 

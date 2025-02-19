@@ -1,6 +1,9 @@
 package com.rafael_souza_de_almeida.inTempo.Entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "comments_tb")
@@ -22,11 +25,15 @@ public class Comment {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    public Comment(Long id, User user, Post post, String content) {
+    @CreationTimestamp
+    private Date created_at;
+
+    public Comment(Long id, User user, Post post, String content, Date created_at) {
         this.id = id;
         this.user = user;
         this.post = post;
         this.content = content;
+        this.created_at = created_at;
     }
 
     public Comment() {
@@ -62,5 +69,13 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
     }
 }
