@@ -6,4 +6,5 @@ export interface Comment {
   content: string;
   profile_pic?: string;
   name: string;
+  created_at: string;
 }

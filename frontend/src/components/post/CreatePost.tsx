@@ -16,17 +16,18 @@ import {
   validationSchema,
 } from "@/validation/postValidation";
 import { Post } from "@/resources/post/post_resources";
+import { useUserData } from "../userContext";
 
 interface CreatePostProps {
-  userData: User | undefined;
   posts: Post[] | undefined;
   setPosts: React.Dispatch<React.SetStateAction<Post[] | undefined>>;
 }
 
-export function CreatePost({ userData, posts, setPosts }: CreatePostProps) {
+export function CreatePost({ posts, setPosts }: CreatePostProps) {
   const post_service = usePost();
   const notification = useNotification();
   const { isLoggedIn } = useIsLoggedIn();
+  const { userData } = useUserData();
 
   const { values, handleSubmit, handleChange, errors } =
     useFormik<PostAttributes>({

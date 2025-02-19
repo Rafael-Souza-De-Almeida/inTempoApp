@@ -11,14 +11,14 @@ import { useState } from "react";
 import { useIsLoggedIn } from "../login/LoginContext";
 import { useUserBookmarks } from "./UserBookmarkContext";
 import { Comment } from "@/resources/comment/comment_resources";
+import { TimeAgo } from "../timeAgo/timeAgo";
+import { useUserData } from "../userContext";
 
 interface ShowPostProps {
   post: ShowPostAttributes | undefined;
-  profile_pic: string | null | undefined;
-  name: string | undefined;
 }
 
-export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
+export function ShowPost({ post }: ShowPostProps) {
   if (!post) {
     return;
   }
@@ -28,6 +28,7 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
   const { userBookmarks, handleBookmark } = useUserBookmarks();
   const { isLoggedIn } = useIsLoggedIn();
   const [comments, setComments] = useState<Comment[]>(post.comments || []);
+  const { userData } = useUserData();
 
   return (
     <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md ">
@@ -36,9 +37,12 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
         name={post?.name}
         classname="items-center"
       >
-        <p className="font-semibold">@{post?.username}</p>
+        <div className="flex gap-4 items-center">
+          <p className="font-semibold">@{post?.username}</p>
+          <TimeAgo created_at={post.created_at} />
+        </div>
 
-        <div className="flex flex-col mt-4 cursor-pointer">
+        <div className="flex flex-col mt-2 cursor-pointer">
           <p> {post?.content} </p>
         </div>
 
@@ -96,8 +100,8 @@ export function ShowPost({ post, profile_pic, name }: ShowPostProps) {
         <div className="w-[450px] mt-8">
           <CreateComment
             post={post}
-            profile_pic={profile_pic}
-            name={name}
+            profile_pic={userData?.image_url}
+            name={userData?.name}
             comments={comments}
             setComments={setComments}
           />

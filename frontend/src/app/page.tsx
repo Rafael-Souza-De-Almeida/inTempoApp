@@ -8,6 +8,7 @@ import { CreatePost } from "@/components/post/CreatePost";
 import { PostList } from "@/components/post/PostList";
 import { useUserLikes } from "@/components/post/UserLikesContext";
 import Sidebar from "@/components/sidebar/Sidebar";
+import { useUserData } from "@/components/userContext";
 import { User } from "@/resources/auth/auth_resources";
 import { useAuth } from "@/resources/auth/auth_service";
 import { useBookmark } from "@/resources/Bookmark/bookmark_service";
@@ -17,9 +18,8 @@ import { usePost } from "@/resources/post/post_service";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const { loading, setLoading } = useLoading();
-  const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
-  const [userData, setUserData] = useState<User>();
+  const { loading } = useLoading();
+  const { isLoggedIn } = useIsLoggedIn();
 
   const [posts, setPosts] = useState<Post[] | undefined>();
   const auth = useAuth();
@@ -27,19 +27,6 @@ export default function Home() {
   const postService = usePost();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setLoading(true);
-        const result = await auth.getUserData();
-        setUserData(result);
-        setIsLoggedIn(true);
-      } catch (error: any) {
-        setIsLoggedIn(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const fetchAllPosts = async () => {
       try {
         const result = await postService.getAllPosts();
@@ -51,7 +38,6 @@ export default function Home() {
     };
 
     fetchAllPosts();
-    fetchUser();
   }, []);
 
   if (loading || isLoggedIn === null) {
@@ -64,7 +50,7 @@ export default function Home() {
         <Sidebar />
       </div>
       <div>
-        <CreatePost userData={userData} posts={posts} setPosts={setPosts} />
+        <CreatePost posts={posts} setPosts={setPosts} />
         <PostList posts={posts} />
       </div>
     </div>

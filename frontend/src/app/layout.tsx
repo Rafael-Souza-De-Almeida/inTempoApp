@@ -7,6 +7,7 @@ import { LoginProvider } from "@/components/login/LoginContext";
 import { LoadingProvider } from "@/components/loading/loadingContext";
 import { UserLikesProvider } from "@/components/post/UserLikesContext";
 import { UserBookmarkProvider } from "@/components/post/UserBookmarkContext";
+import { UserDataProvider } from "@/components/userContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,9 +42,11 @@ export default function RootLayout({
         >
           <LoadingProvider>
             <LoginProvider>
-              <UserLikesProvider>
-                <UserBookmarkProvider>{children}</UserBookmarkProvider>
-              </UserLikesProvider>
+              <UserDataProvider>
+                <UserLikesProvider>
+                  <UserBookmarkProvider>{children}</UserBookmarkProvider>
+                </UserLikesProvider>
+              </UserDataProvider>
             </LoginProvider>
           </LoadingProvider>
         </ThemeProvider>

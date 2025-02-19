@@ -12,6 +12,9 @@ import { useBookmark } from "@/resources/Bookmark/bookmark_service";
 import { useRouter } from "next/navigation";
 import { useUserLikes } from "./UserLikesContext";
 import { useUserBookmarks } from "./UserBookmarkContext";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { TimeAgo } from "../timeAgo/timeAgo";
 
 interface PostProps {
   post: Post;
@@ -35,7 +38,10 @@ export function PostTemplate({ post }: PostProps) {
           onClick={() => router.push(`/post/${post.id}`)}
           className="space-y-2"
         >
-          <p className="font-semibold text-lg">@{post.username}</p>
+          <div className="flex gap-4 items-center">
+            <p className="font-semibold text-lg">@{post.username}</p>
+            <TimeAgo created_at={post.created_at} />
+          </div>
           <p>{post.content}</p>
         </div>
 

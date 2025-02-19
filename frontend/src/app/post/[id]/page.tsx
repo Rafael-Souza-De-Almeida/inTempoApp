@@ -43,18 +43,7 @@ export default function DetailPost() {
       }
     };
 
-    const fetchUser = async () => {
-      try {
-        const result = await auth.getUserData();
-        setUserData(result);
-        setIsLoggedIn(true);
-      } catch (error: any) {
-        return;
-      }
-    };
-
     fetchPost();
-    fetchUser();
   }, []);
 
   if (loading || isLoggedIn === null) {
@@ -67,11 +56,7 @@ export default function DetailPost() {
         <Sidebar />
       </div>
       <div className="w-full">
-        <ShowPost
-          post={post}
-          profile_pic={userData?.image_url}
-          name={userData?.name}
-        />
+        <ShowPost post={post} />
       </div>
     </div>
   );
