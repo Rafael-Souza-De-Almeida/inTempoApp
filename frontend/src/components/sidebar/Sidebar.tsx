@@ -13,6 +13,7 @@ import { useIsLoggedIn } from "../login/LoginContext";
 import { useLoading } from "../loading/loadingContext";
 import { Loading } from "../loading/loading";
 import { useRouter } from "next/navigation";
+import { useUserData } from "../userContext";
 
 export default function Sidebar() {
   const auth = useAuth();
@@ -20,6 +21,7 @@ export default function Sidebar() {
   const { isLoggedIn, setIsLoggedIn } = useIsLoggedIn();
   const { loading, setLoading } = useLoading();
   const router = useRouter();
+  const { userData } = useUserData();
 
   async function handleLogout() {
     try {
@@ -62,16 +64,29 @@ export default function Sidebar() {
           <div>Home</div>
         </Link>
 
-        <Link
-          href="/"
-          className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
-        >
-          <div>
-            <UserRound />
-          </div>
+        {isLoggedIn ? (
+          <Link
+            href={`/profile/${userData?.id}`}
+            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
+          >
+            <div>
+              <UserRound />
+            </div>
 
-          <div>Perfil</div>
-        </Link>
+            <div>Perfil</div>
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
+          >
+            <div>
+              <UserRound />
+            </div>
+
+            <div>Perfil</div>
+          </Link>
+        )}
 
         <Link
           href="/bookmarks"

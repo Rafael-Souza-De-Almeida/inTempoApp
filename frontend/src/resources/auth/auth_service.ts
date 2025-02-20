@@ -1,4 +1,4 @@
-import { LoginRequest, User } from "./auth_resources";
+import { LoginRequest, Profile, User } from "./auth_resources";
 
 export class AuthService {
   url = "http://localhost:8080/auth";
@@ -38,6 +38,18 @@ export class AuthService {
     if (!response.ok) {
       const errorMessage = await response.json();
       throw new Error(errorMessage.error);
+    }
+
+    return await response.json();
+  }
+
+  async getProfile(userId: string): Promise<Profile> {
+    const newUrl = this.url + `/profile/${userId}`;
+
+    const response = await fetch(newUrl);
+
+    if (!response.ok) {
+      throw new Error("Não foi possível acessar a página do usuário.");
     }
 
     return await response.json();
