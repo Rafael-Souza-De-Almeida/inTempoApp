@@ -25,6 +25,22 @@ export default class CommentService {
 
     return await response.json();
   }
+
+  async delete(commentId: number): Promise<void> {
+    const newUrl = this.url + `/${commentId}`;
+
+    const response = await fetch(newUrl, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Não foi possível remover o comentário");
+    }
+  }
 }
 
 export const useComment = () => new CommentService();

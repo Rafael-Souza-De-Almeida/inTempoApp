@@ -43,14 +43,14 @@ export function ShowPost({ post, handleDeletePost }: ShowPostProps) {
         name={post?.name}
         classname="items-center"
       >
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center relative">
           <p className="font-semibold">@{post?.username}</p>
           <TimeAgo created_at={post.created_at} />
           {userData?.id === post.user_id ? (
             <Trash2
-              className="cursor-pointer"
+              className="cursor-pointer "
               color="red"
-              size={20}
+              size={16}
               onClick={() => handleDeletePost(post.id)}
             />
           ) : (

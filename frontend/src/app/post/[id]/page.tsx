@@ -46,7 +46,7 @@ export default function DetailPost() {
 
   const handleDeletePost = async (postId: number) => {
     const isConfirmed = window.confirm(
-      "Voce têm certeza que deseja apagar esse post?"
+      "Voce tem certeza que deseja apagar esse post?"
     );
 
     if (!isConfirmed) return;
