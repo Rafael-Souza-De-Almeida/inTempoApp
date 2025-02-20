@@ -1,17 +1,23 @@
 package com.rafael_souza_de_almeida.inTempo.DTO.Bookmark;
 
+import com.rafael_souza_de_almeida.inTempo.DTO.Post.PostDTO;
 import com.rafael_souza_de_almeida.inTempo.Entity.Bookmark;
+
+import java.util.Date;
 
 public class BookmarkDTO {
 
     private Long id;
     private String user_id;
-    private Long post_id;
+    private PostDTO post;
 
-    public BookmarkDTO(Bookmark entity) {
-        this.id = entity.getId();;
+
+
+
+    public BookmarkDTO(Bookmark entity, Long likeQuantity, Long commentQuantity) {
+        this.id = entity.getId();
         this.user_id = entity.getUser().getId();
-        this.post_id = entity.getPost().getId();
+        this.post = new PostDTO(entity.getPost(), likeQuantity, commentQuantity);
     }
 
     public BookmarkDTO() {
@@ -25,7 +31,7 @@ public class BookmarkDTO {
         return user_id;
     }
 
-    public Long getPost_id() {
-        return post_id;
+    public PostDTO getPost() {
+        return post;
     }
 }
