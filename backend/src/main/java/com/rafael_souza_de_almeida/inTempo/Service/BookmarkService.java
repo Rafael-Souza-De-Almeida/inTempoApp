@@ -74,10 +74,9 @@ public class BookmarkService {
 
         bookmarkRepository.save(bookmark);
 
-        Long likeQuntity = likeRepository.likeQuantity(post.getId());
-        long commentQuantity = commentRepository.commentsQuantity(post.getId());
 
-        return new BookmarkDTO(bookmark, likeQuntity, commentQuantity);
+
+        return new BookmarkDTO(bookmark);
     }
 
     public void delete(Long id, HttpServletRequest request) throws BookmarkNotFound, AccessDeniedException {

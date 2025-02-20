@@ -44,6 +44,18 @@ public class AuthenticationController {
 
     }
 
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<?> getProfile(@PathVariable String id) {
+
+        try {
+            var result = authenticationService.getProfile(id);
+            return  ResponseEntity.ok().body(result);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+
+    }
+
     @PostMapping("/sign_in")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequestDTO dto, HttpServletResponse response) {
         try {

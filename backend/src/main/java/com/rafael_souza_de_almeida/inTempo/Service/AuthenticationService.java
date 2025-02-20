@@ -1,14 +1,13 @@
 package com.rafael_souza_de_almeida.inTempo.Service;
 
-import com.rafael_souza_de_almeida.inTempo.DTO.User.LoginRequestDTO;
-import com.rafael_souza_de_almeida.inTempo.DTO.User.SignUpRequestDTO;
-import com.rafael_souza_de_almeida.inTempo.DTO.User.UpdateUserRequestDTO;
-import com.rafael_souza_de_almeida.inTempo.DTO.User.UserDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.Post.PostDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.User.*;
+import com.rafael_souza_de_almeida.inTempo.Entity.Post;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.EmailAlreadyTakenException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UserNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UsernameAlredyExistsException;
-import com.rafael_souza_de_almeida.inTempo.Repository.UserRepository;
+import com.rafael_souza_de_almeida.inTempo.Repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,11 +27,19 @@ public class AuthenticationService {
 
      private final JwtService jwtService;
      private final UserRepository userRepository;
+     private final PostRepository postRepository;
+     private final FollowRepository followRepository;
+     private final LikeRepository likeRepository;
+     private final CommentRepository commentRepository;
      private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationService(JwtService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthenticationService(JwtService jwtService, UserRepository userRepository, PostRepository postRepository, FollowRepository followRepository, LikeRepository likeRepository, CommentRepository commentRepository, PasswordEncoder passwordEncoder) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.followRepository = followRepository;
+        this.likeRepository = likeRepository;
+        this.commentRepository = commentRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -41,6 +49,27 @@ public class AuthenticationService {
         User user = userRepository.findById(user_id).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         return new UserDTO(user);
+    }
+
+    public ProfileDTO getProfile(String userId) throws UserNotFoundException {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
+
+        List<PostDTO> allUserPosts = postRepository.findAllUserPosts(userId)
+                .stream()
+                .map((post) -> new PostDTO(post, likeRepository.likeQuantity(post.getId()),
+                        commentRepository.commentsQuantity(post.getId())))
+                .toList();
+
+        Long followerQuantity = (long) followRepository.findAllUserFollowers(userId).size();
+
+        Long followingQuantity = (long) followRepository.findAllUserFollowing(userId).size();
+
+
+
+        return new ProfileDTO(user, followerQuantity, followingQuantity, allUserPosts);
+
+
     }
 
     public void authenticate(LoginRequestDTO dto, HttpServletResponse response) {

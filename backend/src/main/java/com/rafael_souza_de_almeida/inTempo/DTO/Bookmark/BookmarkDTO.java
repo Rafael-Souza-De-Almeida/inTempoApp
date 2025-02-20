@@ -9,6 +9,7 @@ public class BookmarkDTO {
 
     private Long id;
     private String user_id;
+    private Long post_id;
     private PostDTO post;
 
 
@@ -18,6 +19,12 @@ public class BookmarkDTO {
         this.id = entity.getId();
         this.user_id = entity.getUser().getId();
         this.post = new PostDTO(entity.getPost(), likeQuantity, commentQuantity);
+    }
+
+    public BookmarkDTO(Bookmark entity) {
+        this.id = entity.getId();
+        this.post_id = entity.getPost().getId();
+        this.user_id = entity.getUser().getId();
     }
 
     public BookmarkDTO() {
