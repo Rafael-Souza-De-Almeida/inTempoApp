@@ -1,3 +1,4 @@
+import { Post } from "../post/post_resources";
 import { Bookmark } from "./bookmark_resources";
 
 export class BookmarkService {

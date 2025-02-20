@@ -39,9 +39,13 @@ export const UserBookmarkProvider: React.FC<UserLikesProps> = ({
     const listAllBookmarks = async () => {
       try {
         const result = await bookmarkService.getAllUserBookmarks();
-        result.map((bookmark) =>
-          setUserBookmarks(userBookmarks.set(bookmark.post_id, bookmark.id))
-        );
+
+        const newUserBookmarks = new Map();
+        result.forEach((bookmark) => {
+          newUserBookmarks.set(bookmark.post.id, bookmark.id);
+        });
+
+        setUserBookmarks(newUserBookmarks);
       } catch (error: any) {
         const message = error.message;
         console.log(message);

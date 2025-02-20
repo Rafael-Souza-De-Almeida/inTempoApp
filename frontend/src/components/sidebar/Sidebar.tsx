@@ -74,7 +74,7 @@ export default function Sidebar() {
         </Link>
 
         <Link
-          href="/"
+          href="/bookmarks"
           className="flex max-w-[256px] gap-4 p-4  hover:bg-primary rounded-full "
         >
           <div>
