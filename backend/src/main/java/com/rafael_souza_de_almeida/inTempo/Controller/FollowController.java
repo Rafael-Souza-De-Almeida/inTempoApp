@@ -1,19 +1,14 @@
 package com.rafael_souza_de_almeida.inTempo.Controller;
 
-import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowRequestDTO;
 import com.rafael_souza_de_almeida.inTempo.Exception.FollowNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UserNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Service.FollowService;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/follow")
@@ -52,8 +47,8 @@ public class FollowController {
     public ResponseEntity<?> save(@RequestBody FollowRequestDTO dto, HttpServletRequest request) {
 
         try {
-            var result = followService.save(dto, request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+            followService.save(dto, request);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch(UserNotFoundException | BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

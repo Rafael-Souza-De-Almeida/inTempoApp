@@ -1,9 +1,8 @@
 package com.rafael_souza_de_almeida.inTempo.Service;
 
-import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowerDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowRequestDTO;
 import com.rafael_souza_de_almeida.inTempo.Entity.Follow;
-import com.rafael_souza_de_almeida.inTempo.Entity.Post;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.FollowNotFoundException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UserNotFoundException;
@@ -11,7 +10,6 @@ import com.rafael_souza_de_almeida.inTempo.Repository.FollowRepository;
 import com.rafael_souza_de_almeida.inTempo.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.BadRequestException;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -31,24 +29,24 @@ public class FollowService {
         this.followRepository = followRepository;
     }
 
-    public List<FollowDTO> findAllUserFollowers(String username) throws UserNotFoundException {
+    public List<FollowerDTO> findAllUserFollowers(String username) throws UserNotFoundException {
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         List<Follow> userFollowers = followRepository.findAllUserFollowers(user.getId());
 
-        return userFollowers.stream().map(follow -> new FollowDTO(follow, follow.getFollower().getId())).toList();
+        return userFollowers.stream().map(FollowerDTO::new).toList();
     }
 
-    public List<FollowDTO> findAllUserFollowing(String username) throws UserNotFoundException {
+    public List<FollowerDTO> findAllUserFollowing(String username) throws UserNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         List<Follow> followedByUser = followRepository.findAllUserFollowing(user.getId());
 
-        return followedByUser.stream().map(follow -> new FollowDTO(follow, follow.getFollower().getId())).toList();
+        return followedByUser.stream().map(FollowerDTO::new).toList();
     }
 
-    public FollowDTO save(FollowRequestDTO dto, HttpServletRequest request) throws UserNotFoundException, BadRequestException {
+    public void save(FollowRequestDTO dto, HttpServletRequest request) throws UserNotFoundException, BadRequestException {
 
         String user_id = jwtService.extractIdFromCookie(request);
 
@@ -73,8 +71,6 @@ public class FollowService {
         follow.setFollower(follower);
 
         followRepository.save(follow);
-
-        return new FollowDTO(follow, follow.getFollower().getId());
 
     }
 

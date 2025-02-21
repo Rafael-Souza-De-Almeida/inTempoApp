@@ -1,8 +1,8 @@
 package com.rafael_souza_de_almeida.inTempo.DTO.User;
 
+import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowerDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowingDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.Post.PostDTO;
-import com.rafael_souza_de_almeida.inTempo.Entity.Follow;
-import com.rafael_souza_de_almeida.inTempo.Entity.Post;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 
 import java.util.List;
@@ -10,14 +10,24 @@ import java.util.List;
 public class ProfileDTO {
 
     private String profile_pic;
-    private Long followers;
-    private Long following;
+    private String user_id;
+    private String name;
+    private String username;
+    private List<FollowerDTO> followers;
+    private List<FollowingDTO> following;
+    private Long followersQuantity;
+    private Long followingQuantity;
     private List<PostDTO> posts;
 
-    public ProfileDTO(User userEntity, Long followersQuantity, Long followingQuantity, List<PostDTO> posts) {
+    public ProfileDTO(User userEntity, List<FollowerDTO> followers, List<FollowingDTO> following, Long followersQuantity, Long followingQuantity, List<PostDTO> posts) {
         this.profile_pic = userEntity.getImage_url();
-        this.followers = followersQuantity;
-        this.following = followingQuantity;
+        this.user_id = userEntity.getId();
+        this.name = userEntity.getName();
+        this.username = userEntity.getUsername();
+        this.followersQuantity = followersQuantity;
+        this.followingQuantity = followingQuantity;
+        this.followers = followers;
+        this.following = following;
         this.posts = posts;
     }
 
@@ -28,12 +38,32 @@ public class ProfileDTO {
         return profile_pic;
     }
 
-    public Long getFollowers() {
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public List<FollowerDTO> getFollowers() {
         return followers;
     }
 
-    public Long getFollowing() {
+    public List<FollowingDTO> getFollowing() {
         return following;
+    }
+
+    public Long getFollowersQuantity() {
+        return followersQuantity;
+    }
+
+    public Long getFollowingQuantity() {
+        return followingQuantity;
     }
 
     public List<PostDTO> getPosts() {

@@ -1,8 +1,9 @@
 package com.rafael_souza_de_almeida.inTempo.Service;
 
+import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowerDTO;
+import com.rafael_souza_de_almeida.inTempo.DTO.Follow.FollowingDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.Post.PostDTO;
 import com.rafael_souza_de_almeida.inTempo.DTO.User.*;
-import com.rafael_souza_de_almeida.inTempo.Entity.Post;
 import com.rafael_souza_de_almeida.inTempo.Entity.User;
 import com.rafael_souza_de_almeida.inTempo.Exception.EmailAlreadyTakenException;
 import com.rafael_souza_de_almeida.inTempo.Exception.UserNotFoundException;
@@ -13,12 +14,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,15 +60,18 @@ public class AuthenticationService {
                 .stream()
                 .map((post) -> new PostDTO(post, likeRepository.likeQuantity(post.getId()),
                         commentRepository.commentsQuantity(post.getId())))
+                .sorted(Comparator.comparing(PostDTO::getCreated_at).reversed())
                 .toList();
 
-        Long followerQuantity = (long) followRepository.findAllUserFollowers(userId).size();
+        List<FollowerDTO> followers =  followRepository.findAllUserFollowers(userId).stream()
+                .map(FollowerDTO::new).toList();
 
-        Long followingQuantity = (long) followRepository.findAllUserFollowing(userId).size();
+        List<FollowingDTO> following =  followRepository.findAllUserFollowing(userId).stream().map(FollowingDTO::new).toList();
 
+        Long followersQuantity = (long) followers.size();
+        Long followingQuantity = (long) following.size();
 
-
-        return new ProfileDTO(user, followerQuantity, followingQuantity, allUserPosts);
+        return new ProfileDTO(user, followers, following, followersQuantity, followingQuantity, allUserPosts);
 
 
     }

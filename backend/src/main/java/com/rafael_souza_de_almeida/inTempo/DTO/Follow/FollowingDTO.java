@@ -2,7 +2,7 @@ package com.rafael_souza_de_almeida.inTempo.DTO.Follow;
 
 import com.rafael_souza_de_almeida.inTempo.Entity.Follow;
 
-public class FollowerDTO {
+public class FollowingDTO {
 
     private Long id;
     private String user_id;
@@ -10,16 +10,15 @@ public class FollowerDTO {
     private String name;
     private String profile_pic;
 
-    public FollowerDTO(Follow entity) {
+    public FollowingDTO(Follow entity) {
         this.id = entity.getId();
-        this.username = entity.getUser().getUsername();
-        this.name = entity.getUser().getName();
-        this.user_id = entity.getUser().getId();
-        this.profile_pic = entity.getUser().getImage_url();
+        this.user_id = entity.getFollower().getId();
+        this.username = entity.getFollower().getUsername();
+        this.name = entity.getFollower().getName();
+        this.profile_pic = entity.getFollower().getImage_url();
     }
 
-
-    public FollowerDTO() {
+    public FollowingDTO() {
     }
 
     public Long getId() {
@@ -30,16 +29,15 @@ public class FollowerDTO {
         return user_id;
     }
 
-
     public String getUsername() {
         return username;
     }
 
-    public String getProfile_pic() {
-        return profile_pic;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public String getProfile_pic() {
+        return profile_pic;
     }
 }
