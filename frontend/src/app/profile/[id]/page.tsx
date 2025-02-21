@@ -1,5 +1,8 @@
 "use client";
 
+import { Loading } from "@/components/loading/loading";
+import { useLoading } from "@/components/loading/loadingContext";
+import { useIsLoggedIn } from "@/components/login/LoginContext";
 import { useNotification } from "@/components/notification";
 import { ProfileTemplate } from "@/components/profile/profileTemplate";
 import Sidebar from "@/components/sidebar/Sidebar";
@@ -15,6 +18,9 @@ export default function ProfilePage() {
   const [userProfile, setUserProfile] = useState<Profile | undefined>(
     undefined
   );
+  const { loading } = useLoading();
+
+  const { isLoggedIn } = useIsLoggedIn();
 
   useEffect(() => {
     if (!id) {
@@ -34,6 +40,9 @@ export default function ProfilePage() {
     fetchUserProfile();
   }, []);
 
+  if (loading || isLoggedIn === null) {
+    return <Loading />;
+  }
   return (
     <div className="grid grid-cols-[20%_80%] gap-24 p-24 min-h-screen">
       <div>

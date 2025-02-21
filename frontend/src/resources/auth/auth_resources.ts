@@ -1,3 +1,4 @@
+import { Follow } from "../Follow/follow_resources";
 import { Post } from "../post/post_resources";
 
 export interface User {
@@ -19,7 +20,9 @@ export interface Profile {
   profile_pic: string;
   name: string;
   username: string;
-  followers: number;
-  following: number;
+  followersQuantity: number;
+  followingQuantity: number;
+  followers: Follow[];
+  following: Follow[];
   posts: Post[];
 }

@@ -2,6 +2,8 @@ import { Profile, User } from "@/resources/auth/auth_resources";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { PostList } from "../post/PostList";
 import { Button } from "../ui/button";
+import { Dialog } from "@radix-ui/react-dialog";
+import { DialogTemplate } from "../dialog/dialogTemplate";
 
 interface ProfileProps {
   userProfile: Profile | undefined;
@@ -30,13 +32,9 @@ export function ProfileTemplate({ userProfile }: ProfileProps) {
       </div>
 
       <div className="flex gap-6 justify-start px-4 pb-4 border-muted border-b-[1px] mt-4">
+        <DialogTemplate userProfile={userProfile} type={"Following"} />
         <div className="flex gap-2">
-          <span className="font-bold">{userProfile?.following}</span>
-          <span className="font-light text-gray-500">Seguindo</span>
-        </div>
-        <div className="flex gap-2">
-          <span className="font-bold">{userProfile?.followers}</span>
-          <span className="font-light text-gray-500">Seguidores</span>
+          <DialogTemplate userProfile={userProfile} type={"Follower"} />
         </div>
       </div>
 

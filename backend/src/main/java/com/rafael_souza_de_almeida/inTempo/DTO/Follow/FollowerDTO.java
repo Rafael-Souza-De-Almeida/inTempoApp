@@ -6,14 +6,14 @@ public class FollowDTO {
 
     private Long id;
     private String user_id;
-    private String follower_id;
     private String username;
+    private String name;
     private String profile_pic;
 
-    public FollowDTO(Follow entity, String follower_id) {
+    public FollowDTO(Follow entity) {
         this.id = entity.getId();
         this.username = entity.getUser().getUsername();
-        this.follower_id = follower_id;
+        this.name = entity.getUser().getName();
         this.user_id = entity.getUser().getId();
         this.profile_pic = entity.getUser().getImage_url();
     }
@@ -30,9 +30,6 @@ public class FollowDTO {
         return user_id;
     }
 
-    public String getFollower_id() {
-        return follower_id;
-    }
 
     public String getUsername() {
         return username;
@@ -40,5 +37,9 @@ public class FollowDTO {
 
     public String getProfile_pic() {
         return profile_pic;
+    }
+
+    public String getName() {
+        return name;
     }
 }
