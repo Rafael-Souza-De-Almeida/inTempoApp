@@ -6,6 +6,8 @@ export interface Post {
   created_at: string;
   username: string;
   name: string;
+  user_id: string;
+  user_created_at: string;
   likeQuantity: number;
   commentsQuantity: number;
   profile_pic?: string;
@@ -18,6 +20,7 @@ export interface ShowPostAttributes {
   username: string;
   name: string;
   user_id: string;
+  user_created_at: string;
   likeQuantity: number;
   commentsQuantity: number;
   profile_pic?: string;

@@ -18,6 +18,7 @@ import { Trash2 } from "lucide-react";
 import { useRouter } from "next/router";
 import { useNotification } from "../notification";
 import { redirect } from "next/navigation";
+import { HoverCardTemplate } from "../hoverCard/hoverCardTemplate";
 
 interface ShowPostProps {
   post: ShowPostAttributes | undefined;
@@ -44,8 +45,9 @@ export function ShowPost({ post, handleDeletePost }: ShowPostProps) {
         classname="items-center"
       >
         <div className="flex gap-4 items-center relative">
-          <p className="font-semibold">@{post?.username}</p>
-          <TimeAgo created_at={post.created_at} />
+          <a href={`/profile/${post.user_id}`}>
+            <HoverCardTemplate post={post} />
+          </a>
           {userData?.id === post.user_id ? (
             <Trash2
               className="cursor-pointer "

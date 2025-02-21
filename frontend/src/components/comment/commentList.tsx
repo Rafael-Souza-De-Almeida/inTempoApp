@@ -1,5 +1,6 @@
 import { Comment } from "@/resources/comment/comment_resources";
 import { CommentTemplate } from "./commentTemplate";
+import { Post } from "@/resources/post/post_resources";
 
 interface CommentListProps {
   comments: Comment[] | undefined;

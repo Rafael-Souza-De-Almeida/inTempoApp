@@ -8,10 +8,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { Profile } from "@/resources/auth/auth_resources";
-import { Follow } from "@/resources/Follow/follow_resources";
 import { CompactProfile } from "../profile/compactProfile";
 
 interface DialogProps {

@@ -15,6 +15,7 @@ import { useUserBookmarks } from "./UserBookmarkContext";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { TimeAgo } from "../timeAgo/timeAgo";
+import { HoverCardTemplate } from "../hoverCard/hoverCardTemplate";
 
 interface PostProps {
   post: Post;
@@ -34,15 +35,13 @@ export function PostTemplate({ post }: PostProps) {
         name={post.name}
         classname="flex-1 space-y-4"
       >
-        <div
-          onClick={() => router.push(`/post/${post.id}`)}
-          className="space-y-2"
-        >
-          <div className="flex gap-4 items-center">
-            <p className="font-semibold text-lg">@{post.username}</p>
-            <TimeAgo created_at={post.created_at} />
+        <div className="space-y-2">
+          <a href={`/profile/${post.user_id}`}>
+            <HoverCardTemplate post={post} />
+          </a>
+          <div onClick={() => router.push(`/post/${post.id}`)}>
+            <p>{post.content}</p>
           </div>
-          <p>{post.content}</p>
         </div>
 
         <div className="flex justify-between items-center text-gray-400 text-sm">
