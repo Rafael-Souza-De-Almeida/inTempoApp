@@ -11,6 +11,7 @@ public class PostDTO {
     private Date created_at;
     private Date updated_at;
     private String user_id;
+    private Date user_created_at;
     private String username;
     private String name;
     private String profile_pic;
@@ -25,6 +26,7 @@ public class PostDTO {
         this.name = entity.getUser().getName();
         this.user_id = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
+        this.user_created_at = entity.getUser().getCreated_at();
         this.likeQuantity = likeQuantity;
         this.commentsQuantity = commentsQuantity;
         this.profile_pic = entity.getUser().getImage_url();
@@ -84,5 +86,9 @@ public class PostDTO {
 
     public String getName() {
         return name;
+    }
+
+    public Date getUser_created_at() {
+        return user_created_at;
     }
 }

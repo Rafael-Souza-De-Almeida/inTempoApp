@@ -45,10 +45,10 @@ public class AuthenticationController {
     }
 
     @GetMapping("/profile/{id}")
-    public ResponseEntity<?> getProfile(@PathVariable String id) {
+    public ResponseEntity<?> getProfile(@PathVariable String id, HttpServletRequest request) {
 
         try {
-            var result = authenticationService.getProfile(id);
+            var result = authenticationService.getProfile(id, request);
             return  ResponseEntity.ok().body(result);
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));

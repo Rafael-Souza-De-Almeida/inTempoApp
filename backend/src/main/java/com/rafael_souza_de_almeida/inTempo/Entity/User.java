@@ -2,7 +2,10 @@ package com.rafael_souza_de_almeida.inTempo.Entity;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,6 +27,14 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Date created_at;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Date updated_at;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Post> posts;
@@ -54,7 +65,7 @@ public class User {
     public User() {
     }
 
-    public User(String id, String name, String email, String username, String password, List<Post> posts, List<Like> likes, List<Bookmark> bookmarks, List<Comment> comments, List<Comment> followers, byte[] profile_pic, String profilePicType, String image_url) {
+    public User(String id, String name, String email, String username, String password, List<Post> posts, List<Like> likes, List<Bookmark> bookmarks, List<Comment> comments, List<Comment> followers, byte[] profile_pic, String profilePicType, String image_url, Date created_at, Date updated_at) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -68,6 +79,8 @@ public class User {
         this.profile_pic = profile_pic;
         this.profilePicType = profilePicType;
         this.image_url = image_url;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
     }
 
     public String getId() {
@@ -108,6 +121,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
+    }
+
+    public Date getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Date updated_at) {
+        this.updated_at = updated_at;
     }
 
     public List<Post> getPosts() {

@@ -18,6 +18,7 @@ public class ShowPostDTO {
     private String username;
     private String name;
     private String profile_pic;
+    private Date user_created_at;
     private Long likeQuantity;
     private Long commentsQuantity;
     private List<CommentDTO> comments;
@@ -30,6 +31,7 @@ public class ShowPostDTO {
         this.name = entity.getUser().getName();
         this.user_id = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
+        this.user_created_at = entity.getUser().getCreated_at();
         this.likeQuantity = likeQuantity;
         this.commentsQuantity = commentsQuantity;
         this.profile_pic = entity.getUser().getImage_url();
@@ -82,5 +84,9 @@ public class ShowPostDTO {
 
     public List<CommentDTO> getComments() {
         return comments;
+    }
+
+    public Date getUser_created_at() {
+        return user_created_at;
     }
 }

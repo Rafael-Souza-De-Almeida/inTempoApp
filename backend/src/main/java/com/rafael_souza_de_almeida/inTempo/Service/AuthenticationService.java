@@ -44,34 +44,38 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDTO userData(HttpServletRequest request) throws UserNotFoundException {
+    public UserDataDTO userData(HttpServletRequest request) throws UserNotFoundException {
         String user_id = jwtService.extractIdFromCookie(request);
 
         User user = userRepository.findById(user_id).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
-        return new UserDTO(user);
+        return new UserDataDTO(user);
     }
 
-    public ProfileDTO getProfile(String userId) throws UserNotFoundException {
+    public ProfileDTO getProfile(String profileId, HttpServletRequest request) throws UserNotFoundException {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
+        User profile = userRepository.findById(profileId).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
 
-        List<PostDTO> allUserPosts = postRepository.findAllUserPosts(userId)
+        String userRequestId = jwtService.extractIdFromCookie(request);
+
+        List<PostDTO> allUserPosts = postRepository.findAllUserPosts(profileId)
                 .stream()
                 .map((post) -> new PostDTO(post, likeRepository.likeQuantity(post.getId()),
                         commentRepository.commentsQuantity(post.getId())))
                 .sorted(Comparator.comparing(PostDTO::getCreated_at).reversed())
                 .toList();
 
-        List<FollowerDTO> followers =  followRepository.findAllUserFollowers(userId).stream()
+        List<FollowerDTO> followersList =  followRepository.findAllUserFollowers(profileId).stream()
                 .map(FollowerDTO::new).toList();
 
-        List<FollowingDTO> following =  followRepository.findAllUserFollowing(userId).stream().map(FollowingDTO::new).toList();
+        List<FollowingDTO> followingList =  followRepository.findAllUserFollowing(profileId).stream().map(FollowingDTO::new).toList();
 
-        Long followersQuantity = (long) followers.size();
-        Long followingQuantity = (long) following.size();
+        boolean isCurrentUserFollowing = followRepository.isFollowing(userRequestId, profileId);
 
-        return new ProfileDTO(user, followers, following, followersQuantity, followingQuantity, allUserPosts);
+        Long followersQuantity = (long) followersList.size();
+        Long followingQuantity = (long) followingList.size();
+
+        return new ProfileDTO(profile, followersList, followingList, followersQuantity, followingQuantity, allUserPosts, isCurrentUserFollowing);
 
 
     }

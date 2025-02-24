@@ -18,8 +18,9 @@ public class ProfileDTO {
     private Long followersQuantity;
     private Long followingQuantity;
     private List<PostDTO> posts;
+    private boolean isCurrentUserFollowing;
 
-    public ProfileDTO(User userEntity, List<FollowerDTO> followers, List<FollowingDTO> following, Long followersQuantity, Long followingQuantity, List<PostDTO> posts) {
+    public ProfileDTO(User userEntity, List<FollowerDTO> followers, List<FollowingDTO> following, Long followersQuantity, Long followingQuantity, List<PostDTO> posts, boolean isCurrentUserFollowing) {
         this.profile_pic = userEntity.getImage_url();
         this.user_id = userEntity.getId();
         this.name = userEntity.getName();
@@ -29,6 +30,7 @@ public class ProfileDTO {
         this.followers = followers;
         this.following = following;
         this.posts = posts;
+        this.isCurrentUserFollowing = isCurrentUserFollowing;
     }
 
     public ProfileDTO() {
@@ -68,5 +70,9 @@ public class ProfileDTO {
 
     public List<PostDTO> getPosts() {
         return posts;
+    }
+
+    public boolean isCurrentUserFollowing() {
+        return isCurrentUserFollowing;
     }
 }
