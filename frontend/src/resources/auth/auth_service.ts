@@ -46,7 +46,10 @@ export class AuthService {
   async getProfile(userId: string): Promise<Profile> {
     const newUrl = this.url + `/profile/${userId}`;
 
-    const response = await fetch(newUrl);
+    const response = await fetch(newUrl, {
+      method: "GET",
+      credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error("Não foi possível acessar a página do usuário.");

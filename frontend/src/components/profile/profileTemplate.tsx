@@ -1,15 +1,51 @@
+"use client";
+
 import { Profile, User } from "@/resources/auth/auth_resources";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { PostList } from "../post/PostList";
 import { Button } from "../ui/button";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogTemplate } from "../dialog/dialogTemplate";
+import { Loading } from "../loading/loading";
+import { useFollow } from "@/resources/Follow/follow_service";
+import { useNotification } from "../notification";
+import { Follow } from "@/resources/Follow/follow_resources";
+import { useRouter } from "next/navigation";
 
 interface ProfileProps {
   userProfile: Profile | undefined;
+  userData: User | undefined;
 }
 
-export function ProfileTemplate({ userProfile }: ProfileProps) {
+export function ProfileTemplate({ userProfile, userData }: ProfileProps) {
+  if (userProfile === undefined || userData === undefined) {
+    return <Loading />;
+  }
+
+  const followService = useFollow();
+  const notification = useNotification();
+  const router = useRouter();
+
+  const handleAddFollow = async (userToFollow: string) => {
+    try {
+      await followService.follow(userToFollow);
+      window.location.reload();
+    } catch (error: any) {
+      const message = error.message;
+      notification.notify(message, "error");
+    }
+  };
+
+  const handleRemoveFollow = async (follow: Follow[]) => {
+    try {
+      await followService.unfollow(follow[0].id);
+      window.location.reload();
+    } catch (error: any) {
+      const message = error.message;
+      notification.notify(message, "error");
+    }
+  };
+
   return (
     <div className="flex flex-col border-2 border-primary w-[900px]">
       <div className="flex justify-between items-center w-full bg-primary">
@@ -22,7 +58,29 @@ export function ProfileTemplate({ userProfile }: ProfileProps) {
         </Avatar>
 
         <div className="relative top-40 right-4">
-          <Button className="w-full rounded-full p-5">Editar perfil</Button>
+          {userData?.id === userProfile?.user_id ? (
+            <Button className="w-full rounded-full p-5">Editar perfil</Button>
+          ) : userProfile?.currentUserFollowing ? (
+            <Button
+              onClick={() =>
+                handleRemoveFollow(
+                  userProfile.followers.filter(
+                    (follow) => follow.user_id === userData.id
+                  )
+                )
+              }
+              className="w-[110px] rounded-full p-5 bg-red-500 hover:bg-red-700"
+            >
+              Seguindo
+            </Button>
+          ) : (
+            <Button
+              onClick={() => handleAddFollow(userProfile.user_id)}
+              className="w-[110px] rounded-full p-5 bg-green-500 hover:bg-green-800"
+            >
+              Seguir
+            </Button>
+          )}
         </div>
       </div>
 

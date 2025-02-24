@@ -25,4 +25,5 @@ export interface Profile {
   followers: Follow[];
   following: Follow[];
   posts: Post[];
+  currentUserFollowing: boolean;
 }

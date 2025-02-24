@@ -6,6 +6,7 @@ import { useIsLoggedIn } from "@/components/login/LoginContext";
 import { useNotification } from "@/components/notification";
 import { ProfileTemplate } from "@/components/profile/profileTemplate";
 import Sidebar from "@/components/sidebar/Sidebar";
+import { useUserData } from "@/components/userContext";
 import { Profile } from "@/resources/auth/auth_resources";
 import { useAuth } from "@/resources/auth/auth_service";
 import { useParams } from "next/navigation";
@@ -18,9 +19,10 @@ export default function ProfilePage() {
   const [userProfile, setUserProfile] = useState<Profile | undefined>(
     undefined
   );
-  const { loading } = useLoading();
 
+  const { loading } = useLoading();
   const { isLoggedIn } = useIsLoggedIn();
+  const { userData } = useUserData();
 
   useEffect(() => {
     if (!id) {
@@ -30,6 +32,7 @@ export default function ProfilePage() {
     const fetchUserProfile = async () => {
       try {
         const result = await authService.getProfile(id);
+
         setUserProfile(result);
       } catch (error: any) {
         const message = error.message;
@@ -49,7 +52,7 @@ export default function ProfilePage() {
         <Sidebar />
       </div>
       <div className="w-full">
-        <ProfileTemplate userProfile={userProfile} />
+        <ProfileTemplate userProfile={userProfile} userData={userData} />
       </div>
     </div>
   );

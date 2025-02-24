@@ -36,7 +36,7 @@ export function PostTemplate({ post }: PostProps) {
         classname="flex-1 space-y-4"
       >
         <div className="space-y-2">
-          <a href={`/profile/${post.user_id}`}>
+          <a href={!isLoggedIn ? "/login" : `/profile/${post.user_id}`}>
             <HoverCardTemplate post={post} />
           </a>
           <div onClick={() => router.push(`/post/${post.id}`)}>
