@@ -1,4 +1,10 @@
-import { LoginRequest, Profile, UpdateUser, User } from "./auth_resources";
+import {
+  LoginRequest,
+  Profile,
+  SignUpRequest,
+  UpdateUser,
+  User,
+} from "./auth_resources";
 
 export class AuthService {
   url = "http://localhost:8080/auth";
@@ -24,6 +30,32 @@ export class AuthService {
       const message = await response.json();
       throw new Error(message.error);
     }
+  }
+
+  async save(signUpValues: SignUpRequest): Promise<SignUpRequest> {
+    const newUrl = this.url + "/sign_up";
+
+    const response = await fetch(newUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        username: signUpValues.username,
+        password: signUpValues.password,
+        name: signUpValues.name,
+        email: signUpValues.email,
+      }),
+
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.json();
+
+      throw new Error(errorMessage.error);
+    }
+
+    return await response.json();
   }
 
   async getUserData(): Promise<User | undefined> {

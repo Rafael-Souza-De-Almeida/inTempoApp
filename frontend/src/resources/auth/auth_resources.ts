@@ -10,6 +10,13 @@ export interface User {
   image_url?: string | null;
 }
 
+export interface SignUpRequest {
+  name: string;
+  email: string;
+  password: string;
+  username: string;
+}
+
 export interface LoginRequest {
   email: string;
   password: string;

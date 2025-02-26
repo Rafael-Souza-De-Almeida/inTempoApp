@@ -73,7 +73,7 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Senha</Label>
                 </div>
                 <Input
                   id="password"
@@ -86,13 +86,10 @@ export function LoginForm({
               <Button type="submit" className="w-full">
                 Login
               </Button>
-              <Button variant="outline" className="w-full">
-                Entrar com google
-              </Button>
             </div>
             <div className="mt-4 text-center text-sm">
               Não possui uma conta?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <a href="/sign_up" className="underline underline-offset-4">
                 Cadastre-se
               </a>
             </div>
