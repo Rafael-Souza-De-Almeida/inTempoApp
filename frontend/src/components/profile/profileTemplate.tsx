@@ -11,6 +11,14 @@ import { useFollow } from "@/resources/Follow/follow_service";
 import { useNotification } from "../notification";
 import { Follow } from "@/resources/Follow/follow_resources";
 import { useRouter } from "next/navigation";
+import { useFormik } from "formik";
+import {
+  EditUserAttributes,
+  editUserInitialValues,
+  editUserSchema,
+} from "@/validation/editUserValidation";
+import { useState } from "react";
+import { EditProfileDialog } from "../dialog/editProfileDialog";
 
 interface ProfileProps {
   userProfile: Profile | undefined;
@@ -24,7 +32,6 @@ export function ProfileTemplate({ userProfile, userData }: ProfileProps) {
 
   const followService = useFollow();
   const notification = useNotification();
-  const router = useRouter();
 
   const handleAddFollow = async (userToFollow: string) => {
     try {
@@ -49,17 +56,18 @@ export function ProfileTemplate({ userProfile, userData }: ProfileProps) {
   return (
     <div className="flex flex-col border-2 border-primary w-[900px]">
       <div className="flex justify-between items-center w-full bg-primary">
-        <Avatar className="relative top-20 left-4 h-48 w-48 text-[80px]">
+        <Avatar className="relative top-20 left-4 h-48 w-48 text-[80px] ">
           <AvatarImage
             src={userProfile?.profile_pic}
             alt="User profile picture"
+            className="object-cover"
           />
           <AvatarFallback>{userProfile?.name.slice(0, 2)}</AvatarFallback>
         </Avatar>
 
         <div className="relative top-40 right-4">
           {userData?.id === userProfile?.user_id ? (
-            <Button className="w-full rounded-full p-5">Editar perfil</Button>
+            <EditProfileDialog />
           ) : userProfile?.currentUserFollowing ? (
             <Button
               onClick={() =>

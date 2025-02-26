@@ -18,8 +18,12 @@ export const SplittedContainer: React.FC<SplittedContainerProps> = ({
   return (
     <div className="flex gap-4 items-start">
       <div>
-        <Avatar className="w-10 h-10">
-          <AvatarImage src={profile_pic ?? ""} alt="User profile picture" />
+        <Avatar className="w-10 h-10 ">
+          <AvatarImage
+            src={profile_pic ?? ""}
+            alt="User profile picture"
+            className="object-cover"
+          />
           <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
         </Avatar>
       </div>

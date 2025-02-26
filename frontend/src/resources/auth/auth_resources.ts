@@ -15,6 +15,12 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface UpdateUser {
+  name?: string;
+  username?: string;
+  profilePic?: File | null;
+}
+
 export interface Profile {
   user_id: string;
   profile_pic: string;

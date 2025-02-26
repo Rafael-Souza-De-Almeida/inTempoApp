@@ -1,4 +1,4 @@
-import { LoginRequest, Profile, User } from "./auth_resources";
+import { LoginRequest, Profile, UpdateUser, User } from "./auth_resources";
 
 export class AuthService {
   url = "http://localhost:8080/auth";
@@ -72,6 +72,31 @@ export class AuthService {
     if (!response.ok) {
       throw new Error("Não foi possível sair de sua conta");
     }
+  }
+
+  async editUserProfile(updateUser: UpdateUser): Promise<UpdateUser> {
+    const newUrl = this.url + "/update_account";
+
+    const formData = new FormData();
+
+    Object.entries(updateUser).forEach(([key, value]) => {
+      if (value) {
+        formData.append(key, value);
+      }
+    });
+
+    const response = await fetch(newUrl, {
+      method: "PUT",
+      credentials: "include",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.json();
+      throw new Error(errorMessage.error);
+    }
+
+    return response.json();
   }
 }
 
