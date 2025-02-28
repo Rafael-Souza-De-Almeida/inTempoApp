@@ -8,7 +8,11 @@ export function TimeAgo({ created_at }: { created_at?: string }) {
   if (!isValid(date))
     return <p className="text-sm text-slate-500">Data inválida</p>;
 
-  const timeAgo = formatDistanceToNow(date, { addSuffix: true, locale: ptBR });
+  let timeAgo = formatDistanceToNow(date, { locale: ptBR });
 
-  return <p className="text-sm text-slate-500">Postado {timeAgo}</p>;
+  timeAgo = timeAgo.replace("cerca de ", "");
+
+  return (
+    <p className=" text-xs md:text-sm text-slate-500">Postado há {timeAgo}</p>
+  );
 }

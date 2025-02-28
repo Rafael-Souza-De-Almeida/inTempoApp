@@ -42,7 +42,15 @@ export function CommentTemplate({ comment }: CommentTemplate) {
         classname=""
       >
         <div className="flex gap-4 items-center">
-          <p className="font-semibold">@{comment.username}</p>
+          <p className="flex font-semibold text-md md:text-lg hover:underline">
+            @
+            <span className="block md:hidden">
+              {comment.username.length <= 8
+                ? comment.username
+                : comment.username.slice(0, 7).concat("...")}
+            </span>
+            <span className="hidden md:block">{comment.username}</span>
+          </p>
           <TimeAgo created_at={comment.created_at} />
           {userData?.id === comment.user_id ? (
             <Trash2

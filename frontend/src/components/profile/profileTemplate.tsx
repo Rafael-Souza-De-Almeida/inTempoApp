@@ -54,9 +54,9 @@ export function ProfileTemplate({ userProfile, userData }: ProfileProps) {
   };
 
   return (
-    <div className="flex flex-col border-2 border-primary w-[900px]">
+    <div className="flex flex-col border-2 border-primary max-w-full md:w-[900px]">
       <div className="flex justify-between items-center w-full bg-primary">
-        <Avatar className="relative top-20 left-4 h-48 w-48 text-[80px] ">
+        <Avatar className="relative top-20 left-4 w-32 h-32 md:h-48 md:w-48 text-[80px] ">
           <AvatarImage
             src={userProfile?.profile_pic}
             alt="User profile picture"

@@ -36,7 +36,7 @@ export default function Bookmarks() {
   }
 
   return (
-    <div className="grid grid-cols-[20%_80%] gap-24 p-24 min-h-screen">
+    <div className="grid grid-cols[10%_90%] gap-32 py-16 px-9 md:grid md:grid-cols-[20%_80%] md:gap-24 md:p-24 md:min-h-screen">
       <div>
         <Sidebar />
       </div>

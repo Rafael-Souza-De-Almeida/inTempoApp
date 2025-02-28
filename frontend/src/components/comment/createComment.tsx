@@ -68,9 +68,9 @@ export function CreateComment({
       classname="space-y-2 w-full"
     >
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <Textarea
-            className="pb-12"
+            className="w-full h-24 md:pb-12 "
             placeholder="Diga algo sobre esse post..."
             value={values.content}
             onChange={handleChange("content")}

@@ -64,7 +64,7 @@ export function CreatePost({ posts, setPosts }: CreatePostProps) {
             ""
           )}
           <Textarea
-            className="w-[500px] h-[100px]"
+            className="min-w-[280px] min-h-[100px] md:w-[500px] md:h-[100px]"
             placeholder="Escreva o que estiver pensando..."
             value={values.content}
             onChange={handleChange("content")}

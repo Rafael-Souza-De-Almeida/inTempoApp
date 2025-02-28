@@ -3,15 +3,19 @@
 import Link from "next/link";
 import InTempoIcon from "../../app/resources/logoIntempo-removebg-preview.png";
 import Image from "next/image";
-import { HomeIcon, LogOut, UserRound, Bookmark, LogIn } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  HomeIcon,
+  LogOut,
+  UserRound,
+  Bookmark,
+  LogIn,
+  Menu,
+} from "lucide-react";
+import { useState } from "react";
 import { useAuth } from "@/resources/auth/auth_service";
 import { useNotification } from "../notification";
-import { User } from "@/resources/auth/auth_resources";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useIsLoggedIn } from "../login/LoginContext";
 import { useLoading } from "../loading/loadingContext";
-import { Loading } from "../loading/loading";
 import { useRouter } from "next/navigation";
 import { useUserData } from "../userContext";
 
@@ -22,6 +26,7 @@ export default function Sidebar() {
   const { loading, setLoading } = useLoading();
   const router = useRouter();
   const { userData } = useUserData();
+  const [isOpen, setIsOpen] = useState(false);
 
   async function handleLogout() {
     try {
@@ -32,98 +37,89 @@ export default function Sidebar() {
       router.refresh();
       notification.notify("Sessão encerrada", "success");
     } catch (error: any) {
-      const message = error.message;
-      notification.notify(message, "error");
+      notification.notify(error.message, "error");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <nav className="flex flex-auto m-auto w-full px-4 sticky top-16">
-      <div className="flex flex-col gap-2">
-        <Link href="/" className="flex max-w-[256px] gap-4 p-4 rounded-full ">
-          <div>
-            <Image
-              src={InTempoIcon}
-              width={100}
-              height={100}
-              alt="Página inicial"
-            />
-          </div>
+    <>
+      <button
+        className="lg:hidden p-4 fixed top-4 left-4 z-50 rounded-full shadow-md"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Menu size={24} />
+      </button>
+
+      <nav
+        className={`fixed top-0 left-0 h-full w-64  shadow-lg p-6 transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform  lg:translate-x-0 lg:flex lg:flex-col lg:w-full  lg:sticky lg:top-16 lg:h-screen ${
+          isOpen ? "bg-primary" : ""
+        } z-10`}
+      >
+        <Link href="/" className="flex max-w-[256px] gap-4 p-4 rounded-full">
+          <Image
+            src={InTempoIcon}
+            width={100}
+            height={100}
+            alt="Página inicial"
+          />
         </Link>
 
         <Link
           href="/"
-          className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
+          className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full"
         >
-          <div>
-            <HomeIcon />
-          </div>
-
-          <div>Home</div>
+          <HomeIcon />
+          <span>Home</span>
         </Link>
 
         {isLoggedIn ? (
           <Link
             href={`/profile/${userData?.id}`}
-            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
+            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full"
           >
-            <div>
-              <UserRound />
-            </div>
-
-            <div>Perfil</div>
+            <UserRound />
+            <span>Perfil</span>
           </Link>
         ) : (
           <Link
             href="/login"
-            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
+            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full"
           >
-            <div>
-              <UserRound />
-            </div>
-
-            <div>Perfil</div>
+            <UserRound />
+            <span>Perfil</span>
           </Link>
         )}
 
         <Link
           href="/bookmarks"
-          className="flex max-w-[256px] gap-4 p-4  hover:bg-primary rounded-full "
+          className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full"
         >
-          <div>
-            <Bookmark />
-          </div>
-
-          <div>Favoritos</div>
+          <Bookmark />
+          <span>Favoritos</span>
         </Link>
 
         {isLoggedIn ? (
-          <Link
-            href="/"
-            onClick={() => handleLogout()}
-            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
+          <button
+            onClick={handleLogout}
+            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full"
           >
-            <div>
-              <LogOut />
-            </div>
-
-            <div>Sair</div>
-          </Link>
+            <LogOut />
+            <span>Sair</span>
+          </button>
         ) : (
           <Link
             href="/login"
-            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full "
+            className="flex max-w-[256px] gap-4 p-4 hover:bg-primary rounded-full"
           >
-            <div>
-              <LogIn />
-            </div>
-
-            <div>Entrar</div>
+            <LogIn />
+            <span>Entrar</span>
           </Link>
         )}
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }

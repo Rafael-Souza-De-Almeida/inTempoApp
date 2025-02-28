@@ -29,7 +29,7 @@ export function PostTemplate({ post }: PostProps) {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md cursor-pointer">
+    <div className="flex flex-col gap-4 border border-primary text-white max-w-[600px] md:w-[600px] min-w-screen px-6 py-5 rounded-lg shadow-md cursor-pointer  ">
       <SplittedContainer
         profile_pic={post.profile_pic}
         name={post.name}
@@ -39,12 +39,15 @@ export function PostTemplate({ post }: PostProps) {
           <a href={!isLoggedIn ? "/login" : `/profile/${post.user_id}`}>
             <HoverCardTemplate post={post} />
           </a>
-          <div onClick={() => router.push(`/post/${post.id}`)}>
-            <p>{post.content}</p>
+          <div
+            onClick={() => router.push(`/post/${post.id}`)}
+            className="break-words"
+          >
+            <p className="text-base">{post.content}</p>
           </div>
         </div>
 
-        <div className="flex justify-between items-center text-gray-400 text-sm">
+        <div className="flex justify-between items-center text-gray-400 text-xs sm:text-sm">
           <div
             onClick={() => router.push(`/post/${post.id}`)}
             className="flex gap-2 items-center hover:text-gray-300 cursor-pointer"
@@ -58,7 +61,6 @@ export function PostTemplate({ post }: PostProps) {
               <div
                 onClick={() => {
                   handleLike(post);
-
                   setLikeQuantity((prev) => prev - 1);
                 }}
                 className="flex gap-2 items-center"

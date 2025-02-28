@@ -17,9 +17,15 @@ export function HoverCardTemplate({ post }: HoverCardProps) {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <div className="flex gap-4 items-center">
-          <p className="font-semibold text-lg hover:underline">
-            @{post.username}
+        <div className="flex gap-2 md:gap-4 items-center">
+          <p className="flex font-semibold text-md md:text-lg hover:underline">
+            @
+            <span className="block md:hidden">
+              {post.username.length <= 8
+                ? post.username
+                : post.username.slice(0, 7).concat("...")}
+            </span>
+            <span className="hidden md:block">{post.username}</span>
           </p>
           <TimeAgo created_at={post.created_at} />
         </div>

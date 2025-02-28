@@ -38,19 +38,19 @@ export function ShowPost({ post, handleDeletePost }: ShowPostProps) {
   const { userData } = useUserData();
 
   return (
-    <div className="flex flex-col gap-4 border border-primary text-white w-[600px] px-6 py-5 rounded-lg shadow-md ">
+    <div className="flex flex-col gap-4 border border-primary text-white w-full px-6 py-5 rounded-lg shadow-md max-w-full md:max-w-[600px]">
       <SplittedContainer
         profile_pic={post?.profile_pic}
         name={post?.name}
         classname="items-center"
       >
         <div className="flex gap-4 items-center relative">
-          <a href={`/profile/${post.user_id}`}>
+          <a href={isLoggedIn ? `/profile/${post.user_id}` : "/login"}>
             <HoverCardTemplate post={post} />
           </a>
           {userData?.id === post.user_id ? (
             <Trash2
-              className="cursor-pointer "
+              className="cursor-pointer"
               color="red"
               size={16}
               onClick={() => handleDeletePost(post.id)}
@@ -61,10 +61,10 @@ export function ShowPost({ post, handleDeletePost }: ShowPostProps) {
         </div>
 
         <div className="flex flex-col mt-2 cursor-pointer">
-          <p> {post?.content} </p>
+          <p>{post?.content}</p>
         </div>
 
-        <div className="flex items-center  w-full gap-48 text-gray-500 dark:text-gray-400 text-sm mt-4">
+        <div className="flex items-center w-full gap-24 md:gap-48 text-gray-500 dark:text-gray-400 text-sm mt-4">
           <div className="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer transition-all">
             <MessageCircle size={18} />
             <p>{post?.commentsQuantity}</p>
@@ -111,7 +111,7 @@ export function ShowPost({ post, handleDeletePost }: ShowPostProps) {
 
         <hr className="mt-4" />
 
-        <div className="w-[450px] mt-8">
+        <div className="w-full mt-8">
           <CreateComment
             post={post}
             profile_pic={userData?.image_url}
