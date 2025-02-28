@@ -157,7 +157,7 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public UserDTO update(String name, String email, String username, MultipartFile profile_pic, HttpServletRequest request) throws UserNotFoundException, UsernameAlredyExistsException, IOException, EmailAlreadyTakenException {
+    public UserDTO update(String name, String username, MultipartFile profile_pic, HttpServletRequest request) throws UserNotFoundException, UsernameAlredyExistsException, IOException {
 
         String userId = jwtService.extractIdFromCookie(request);
 
@@ -167,17 +167,7 @@ public class AuthenticationService {
             throw new AccessDeniedException("Acesso negado");
         }
 
-        if (email != null && !email.isEmpty()) {
 
-            Optional<User> possibleEmail = userRepository.findByEmail(email);
-
-            if(possibleEmail.isPresent() && !possibleEmail.get().getId().equals(userId)) {
-                throw new EmailAlreadyTakenException("Email já cadastrado.");
-            }
-
-
-            userToUpdate.setEmail(email);
-        }
 
         if(name != null && !name.isEmpty()) {
             userToUpdate.setName(name);
@@ -191,6 +181,7 @@ public class AuthenticationService {
             }
 
             userToUpdate.setUsername(username);
+            userToUpdate.setImage_url(generateImageUrl(userToUpdate.getUsername()));
 
 
 

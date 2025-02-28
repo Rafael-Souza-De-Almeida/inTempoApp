@@ -41,7 +41,7 @@ public class JwtService {
                 .claim("user_id", user.getId())
                 .build();
 
-        String token =  encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        String token = encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
         ResponseCookie cookie = ResponseCookie.from("jwt_token", token)
                 .httpOnly(true)

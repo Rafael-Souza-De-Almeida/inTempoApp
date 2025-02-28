@@ -72,7 +72,7 @@ public class AuthenticationController {
             var result = authenticationService.save(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (UsernameAlredyExistsException | EmailAlreadyTakenException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error",e.getMessage()));
         }
     }
 
@@ -84,15 +84,14 @@ public class AuthenticationController {
 
     @PutMapping("/update_account")
     public ResponseEntity<?> update(@RequestParam(required = false) String name,
-                                    @RequestParam(required = false) String email,
                                     @RequestParam(required = false) String username,
-                                    @RequestPart(name = "profile_pic")MultipartFile profile_pic,
+                                    @RequestPart( required = false)MultipartFile profilePic,
                                     HttpServletRequest request) {
         try {
-            var result = authenticationService.update(name, email, username, profile_pic, request);
+            var result = authenticationService.update(name,  username, profilePic, request);
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch (UserNotFoundException | UsernameAlredyExistsException | EmailAlreadyTakenException | IOException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (UserNotFoundException | UsernameAlredyExistsException | IOException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
         }
     }
 

@@ -20,3 +20,13 @@ spring:
     keys:
       public: classpath:app.pub
       private: classpath:app.key
+
+---
+#Produção
+
+spring:
+  config:
+    activate:
+      on-profile: production
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/InTempo
