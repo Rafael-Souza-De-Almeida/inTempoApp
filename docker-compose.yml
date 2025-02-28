@@ -28,19 +28,34 @@ services:
 
   api:
     build:
-      dockerfile: DockerFile
+      dockerfile: Dockerfile
+      context: ./backend
     container_name: inTempoApi
     restart: on-failure
     depends_on:
       - db
     ports:
-      - '8080:8080'
+      - "8080:8080"
     networks:
       - inTempoNetwork
     environment:
       - "POSTGRES_HOST=db"
 
+  front:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    container_name: inTempoApp
+    restart: on-failure
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    networks:
+      - inTempoNetwork
+    expose:
+      - 3000
+
 networks:
   inTempoNetwork:
     driver: bridge
-
