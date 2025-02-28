@@ -1,7 +1,7 @@
 import { Post, ShowPostAttributes } from "./post_resources";
 
 export class PostService {
-  url = "http://localhost:8080/posts";
+  url = process.env.NEXT_PUBLIC_API_URL + "/posts";
 
   async getAllPosts(): Promise<Post[]> {
     const response = await fetch(this.url);

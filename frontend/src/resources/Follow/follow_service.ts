@@ -1,7 +1,7 @@
 import { json } from "stream/consumers";
 
 export class FollowService {
-  url = "http://localhost:8080/follow";
+  url = process.env.NEXT_PUBLIC_API_URL + "/follow";
 
   async follow(userToFollow: string): Promise<void> {
     const newUrl = this.url + "/add";

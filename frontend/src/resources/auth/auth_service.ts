@@ -7,7 +7,7 @@ import {
 } from "./auth_resources";
 
 export class AuthService {
-  url = "http://localhost:8080/auth";
+  url = process.env.NEXT_PUBLIC_API_URL + "/auth";
 
   async authenticate(loginRequest: LoginRequest): Promise<void> {
     const newUrl = this.url + "/sign_in";

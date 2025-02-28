@@ -1,7 +1,7 @@
 import { Like } from "./like_resources";
 
 export class LikeService {
-  url = "http://localhost:8080/like";
+  url = process.env.NEXT_PUBLIC_API_URL + "/like";
 
   async getAllUserLikes(): Promise<Like[]> {
     const response = await fetch(this.url, {

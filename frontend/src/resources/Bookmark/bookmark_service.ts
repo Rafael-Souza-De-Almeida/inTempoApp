@@ -2,7 +2,7 @@ import { Post } from "../post/post_resources";
 import { Bookmark } from "./bookmark_resources";
 
 export class BookmarkService {
-  url = "http://localhost:8080/bookmark";
+  url: string = process.env.NEXT_PUBLIC_API_URL + "/bookmark";
 
   async getAllUserBookmarks(): Promise<Bookmark[]> {
     const response = await fetch(this.url, {

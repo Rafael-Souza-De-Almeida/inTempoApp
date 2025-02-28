@@ -1,7 +1,7 @@
 import { Comment } from "./comment_resources";
 
 export default class CommentService {
-  url = "http://localhost:8080/comments";
+  url = process.env.NEXT_PUBLIC_API_URL + "/comments";
 
   async save(postId: number, commentContent: string): Promise<Comment> {
     const newUrl = this.url + "/add";
