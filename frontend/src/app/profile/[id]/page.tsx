@@ -47,7 +47,7 @@ export default function ProfilePage() {
     return <Loading />;
   }
   return (
-    <div className="grid grid-cols-1 gap-8 py-16 px-6 sm:grid-cols-[20%_80%] sm:gap-16 sm:px-12 md:grid-cols-[20%_80%] md:gap-24 md:px-24 md:min-h-screen">
+    <div className="grid grid-cols[10%_90%] gap-32 py-16 px-9 md:grid md:grid-cols-[20%_80%] md:gap-24 md:p-24 md:min-h-screen ">
       <div>
         <Sidebar />
       </div>
