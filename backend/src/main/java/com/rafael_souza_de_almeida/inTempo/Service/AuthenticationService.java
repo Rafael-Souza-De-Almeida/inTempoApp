@@ -85,7 +85,7 @@ public class AuthenticationService {
         Optional<User> possibleUser = userRepository.findByEmail(dto.getEmail());
 
         if(possibleUser.isEmpty()) {
-            throw new RuntimeException("Usuário não encontrado");
+            throw new RuntimeException("Email ou senha incorretas");
         }
 
         User user = possibleUser.get();
@@ -93,7 +93,7 @@ public class AuthenticationService {
         boolean isPasswordCorrect = passwordEncoder.matches(dto.getPassword(), user.getPassword());
 
         if(!isPasswordCorrect) {
-            throw new RuntimeException("Email ous enha incorretas");
+            throw new RuntimeException("Email ou senha incorretas");
         }
 
          jwtService.generateToken(user, response);

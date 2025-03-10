@@ -6,6 +6,8 @@ spring:
     hikari:
       auto-commit: false
 
+
+
   jpa:
     database: POSTGRESQL
     hibernate:
