@@ -52,7 +52,14 @@ O projeto utiliza **PostgreSQL** como banco de dados.
 
 ## Capturas de Tela
 
-_Aqui você pode adicionar imagens do projeto_
+![Captura de tela 2025-04-16 193103](https://github.com/user-attachments/assets/1d052367-b083-4f3e-ad95-bef898f67ac0)
+![Captura de tela 2025-04-16 193028](https://github.com/user-attachments/assets/f4010f82-c53f-4259-8452-61829f810211)
+![Captura de tela 2025-04-16 194452](https://github.com/user-attachments/assets/7cd31323-ad24-4c2d-aba4-7227bff1e06f)
+![Captura de tela 2025-04-16 194400](https://github.com/user-attachments/assets/bfdf2beb-162d-4dbd-a678-388c184c2578)
+![Captura de tela 2025-04-16 194203](https://github.com/user-attachments/assets/ff935b3c-bbde-49e4-92a1-189fe638adb6)
+![Captura de tela 2025-04-16 193927](https://github.com/user-attachments/assets/fa12474a-1808-4211-badc-402bce46fc75)
+
+
 
 ## Contribuição
 
